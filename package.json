@@ -29,8 +29,11 @@
   "license": "0BSD",
   "scripts": {
     "build": "gatsby build",
-    "develop": "gatsby develop",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "build-stage": "npm run build",
+    "build-local": "npm run local",
+    "local": "gatsby clean && gatsby build && gatsby serve -p9000",
+    "develop": "gatsby develop -p3000",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
