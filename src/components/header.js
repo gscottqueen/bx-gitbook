@@ -1,4 +1,5 @@
-import { Link } from "gatsby"
+// import { Link } from "gatsby"
+import Nav from '../components/nav'
 import PropTypes from "prop-types"
 import React from "react"
 
@@ -6,7 +7,7 @@ const Header = ({ siteTitle }) => (
   <header>
     <div>
       <h1>
-        <Link to="/">{siteTitle}</Link>
+        <Nav />
       </h1>
     </div>
   </header>
