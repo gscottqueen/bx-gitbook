@@ -16,7 +16,7 @@ export default function PageTemplate({ data }) {
     <Layout>
       <div className="page-container">
         <div className="page-markdown">
-          <h1>{headings.value}</h1>
+          {/* <h1>{headings.value}</h1> */}
           <GitEditButton gitFile={gitFile}/>
           <span>Time to read: {timeToRead} min</span>
           <div
@@ -31,7 +31,7 @@ export default function PageTemplate({ data }) {
 export const pageQuery = graphql`
   query($id: String!) {
     markdownRemark(fileAbsolutePath: { regex: $id }) {
-      headings(depth: h1) {
+      headings {
         value
       }
       html
