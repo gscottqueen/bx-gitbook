@@ -16,7 +16,6 @@ export default function PageTemplate({ data }) {
     <Layout>
       <div className="page-container">
         <div className="page-markdown">
-          {/* <h1>{headings.value}</h1> */}
           <GitEditButton gitFile={gitFile}/>
           <span>Time to read: {timeToRead} min</span>
           <ul>On this page:
