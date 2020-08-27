@@ -23,7 +23,7 @@ async function createTechPages({ graphql, actions }) {
   `)
 
   data.allFile.nodes.forEach(file => {
-    let regex = `/\/${file.name}*\\w+/`
+    let regex = `/(\/${file.relativeDirectory})+(\/${file.name})+/`
 
     actions.createPage({
       path: `/${file.relativeDirectory}/${file.name}/`,
