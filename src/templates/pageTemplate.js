@@ -19,6 +19,13 @@ export default function PageTemplate({ data }) {
           {/* <h1>{headings.value}</h1> */}
           <GitEditButton gitFile={gitFile}/>
           <span>Time to read: {timeToRead} min</span>
+          <ul>On this page:
+            {headings.map(( heading, i) => {
+              return (
+                <li key={i}>{heading.value}</li>
+              )
+            })}
+          </ul>
           <div
             className="page-markdown-content"
             dangerouslySetInnerHTML={{ __html: html }}
