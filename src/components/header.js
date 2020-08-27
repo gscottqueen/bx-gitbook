@@ -6,9 +6,7 @@ import React from "react"
 const Header = ({ siteTitle }) => (
   <header>
     <div>
-      <h1>
-        <Nav/>
-      </h1>
+      <Nav/>
     </div>
   </header>
 )

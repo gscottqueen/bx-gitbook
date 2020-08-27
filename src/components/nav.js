@@ -14,6 +14,14 @@ export default function Nav() {
             relativeDirectory
             relativePath
             name
+            children {
+              ... on MarkdownRemark {
+                id
+                headings(depth: h1) {
+                  value
+                }
+              }
+            }
           }
         }
       }
@@ -45,6 +53,7 @@ export default function Nav() {
       name: node.node.name,
       relativeDirectory: node.node.relativeDirectory,
       relativePath: node.node.relativePath.replace("/README.md", ""),
+      titles: node.node.children,
       children: [],
     })
   }
@@ -72,7 +81,14 @@ export default function Nav() {
               <Link
                 to={`/${item.relativeDirectory}/${item.name}`}
                 key={item.name}
-              >{item.relativePath}
+              >{
+              item.titles.map(({headings}) => {
+                return headings.map(({ value }) => {
+                  console.log(value)
+                  return <span>{value}</span>
+                })
+              })
+              }
               </Link>
               {item.children ? <MobileNavigationItems menuItems={item.children}/> : null}
             </li>
