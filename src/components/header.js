@@ -1,12 +1,12 @@
 // import { Link } from "gatsby"
-import Nav from '../components/nav'
+// import Nav from '../components/nav'
 import PropTypes from "prop-types"
 import React from "react"
 
 const Header = ({ siteTitle }) => (
   <header>
     <div>
-      <Nav/>
+      <h1>Bixal Techbook</h1>
     </div>
   </header>
 )

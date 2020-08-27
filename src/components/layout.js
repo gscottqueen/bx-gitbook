@@ -8,6 +8,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { useStaticQuery, graphql } from "gatsby"
+import Nav from '../components/nav'
 
 import Header from "./header"
 import "normalize.css"
@@ -27,7 +28,19 @@ const Layout = ({ children }) => {
     <>
       <Header siteTitle={data.site.siteMetadata.title} />
       <div>
-        <main>{children}</main>
+        <aside
+          style={{
+            display: "block",
+            float: "left",
+            width: "33%",
+            height: "100%",
+          }}
+        >
+          <Nav />
+        </aside>
+        <main>
+          {children}
+        </main>
         <footer>
           © {new Date().getFullYear()},{" "}
           <a href="https://www.bixal.com">Bixal</a> Documentation
