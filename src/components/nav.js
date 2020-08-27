@@ -1,5 +1,4 @@
 import { graphql, useStaticQuery, Link } from "gatsby"
-import PropTypes from "prop-types"
 import React from "react"
 
 export default function Nav() {
@@ -100,12 +99,4 @@ export default function Nav() {
       <MobileNavigationItems menuItems={menuItemsTree} />
     </nav>
   )
-}
-
-Nav.propTypes = {
-  siteTitle: PropTypes.string,
-}
-
-Nav.defaultProps = {
-  siteTitle: ``,
 }
