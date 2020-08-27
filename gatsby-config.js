@@ -3,6 +3,7 @@ module.exports = {
     title: `Bixal Techbook`,
     description: `A git based documentation app for Bixal Corp Tech Knowledge.`,
     author: `@bixal`,
+    gitrepo: `https://github.com/gscottqueen/bx-gitbook`
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
