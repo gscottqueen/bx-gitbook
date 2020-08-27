@@ -22,7 +22,7 @@ export default function PageTemplate({ data }) {
 }
 export const pageQuery = graphql`
   query($id: String!) {
-    markdownRemark(fileAbsolutePath: {regex: $id}) {
+    markdownRemark(fileAbsolutePath: { regex: $id }) {
       headings(depth: h1) {
         value
       }

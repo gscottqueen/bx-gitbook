@@ -8,7 +8,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { useStaticQuery, graphql } from "gatsby"
-import Nav from '../components/nav'
+import Nav from "../components/nav"
 
 import Header from "./header"
 import "normalize.css"
@@ -38,9 +38,7 @@ const Layout = ({ children }) => {
         >
           <Nav />
         </aside>
-        <main>
-          {children}
-        </main>
+        <main>{children}</main>
         <footer>
           © {new Date().getFullYear()},{" "}
           <a href="https://www.bixal.com">Bixal</a> Documentation

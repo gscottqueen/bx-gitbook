@@ -23,7 +23,6 @@ async function createTechPages({ graphql, actions }) {
   `)
 
   data.allFile.nodes.forEach(file => {
-
     let regex = `/\/${file.name}*\\w+/`
 
     actions.createPage({
@@ -32,7 +31,7 @@ async function createTechPages({ graphql, actions }) {
       context: { id: regex },
     })
   })
-};
+}
 
 exports.createPages = async ({ graphql, actions }) => {
   await Promise.all([createTechPages({ graphql, actions })])

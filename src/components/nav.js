@@ -1,4 +1,4 @@
-import { graphql,useStaticQuery, Link } from "gatsby"
+import { graphql, useStaticQuery, Link } from "gatsby"
 import PropTypes from "prop-types"
 import React from "react"
 
@@ -29,7 +29,7 @@ export default function Nav() {
   `)
 
   const pagesData = data.allFile.edges
-  console.log('data', pagesData)
+  console.log("data", pagesData)
 
   // Add an item node in the tree, at the right position
   function addToTree(node, treeNodes) {
@@ -73,33 +73,33 @@ export default function Nav() {
   const menuItemsTree = createTree(pagesData)
 
   function MobileNavigationItems(props) {
-
     return props.menuItems.map((item, i) => {
-        return (
-          <ul key={item.name + i}>
-            <li>
-              <Link
-                to={`/${item.relativeDirectory}/${item.name}`}
-                key={item.name}
-              >{
-              item.titles.map(({headings}) => {
+      return (
+        <ul key={item.name + i}>
+          <li>
+            <Link
+              to={`/${item.relativeDirectory}/${item.name}`}
+              key={item.name}
+            >
+              {item.titles.map(({ headings }) => {
                 return headings.map(({ value }) => {
                   console.log(value)
                   return <span>{value}</span>
                 })
-              })
-              }
-              </Link>
-              {item.children ? <MobileNavigationItems menuItems={item.children}/> : null}
-            </li>
-          </ul>
-        )
+              })}
+            </Link>
+            {item.children ? (
+              <MobileNavigationItems menuItems={item.children} />
+            ) : null}
+          </li>
+        </ul>
+      )
     })
   }
 
   return (
     <nav>
-      <MobileNavigationItems menuItems={menuItemsTree}/>
+      <MobileNavigationItems menuItems={menuItemsTree} />
     </nav>
   )
 }
