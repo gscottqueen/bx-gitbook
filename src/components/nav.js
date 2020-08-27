@@ -21,7 +21,7 @@ export default function Nav() {
   `)
 
   const pagesData = data.allFile.edges
-  console.log(pagesData)
+  console.log('data', pagesData)
 
   // Add an item node in the tree, at the right position
   function addToTree(node, treeNodes) {
@@ -30,7 +30,7 @@ export default function Nav() {
       var treeNode = treeNodes[i]
 
       // README files are needed but cause too much trouble because they are returned in the query as part of the reative path
-      let path = node.node.relativePath.replace("\/README.md", "")
+      let path = node.node.relativePath.replace("/README.md", "")
 
       if (path.indexOf(treeNode.relativePath) !== -1) {
         addToTree(node, treeNode.children)
@@ -44,7 +44,7 @@ export default function Nav() {
     treeNodes.push({
       name: node.node.name,
       relativeDirectory: node.node.relativeDirectory,
-      relativePath: node.node.relativePath.replace("\/README.md", ""),
+      relativePath: node.node.relativePath.replace("/README.md", ""),
       children: [],
     })
   }
@@ -63,51 +63,27 @@ export default function Nav() {
 
   const menuItemsTree = createTree(pagesData)
 
-  console.log('menu', menuItemsTree)
+  function MobileNavigationItems(props) {
+
+    return props.menuItems.map((item, i) => {
+        return (
+          <ul key={item.name + i}>
+            <li>
+              <Link
+                to={`/${item.relativeDirectory}/${item.name}`}
+                key={item.name}
+              >{item.relativePath}
+              </Link>
+              {item.children ? <MobileNavigationItems menuItems={item.children}/> : null}
+            </li>
+          </ul>
+        )
+    })
+  }
 
   return (
     <nav>
-      {menuItemsTree.map((items, i) => (
-        <ul key={i}>
-          <li>
-            <Link to={`/${items.relativeDirectory}/${items.name}`} key={i}>
-              {items.relativePath}
-            </Link>
-              {items.children
-                ? items.children.map((child, i) => {
-                    return (
-                      <ul>
-                        <li key={i}>
-                          <Link
-                            to={`/${child.relativeDirectory}/${child.name}`}
-                            key={"sub-" + i}
-                          >
-                            {child.relativePath}
-                          </Link>
-                          {child.children
-                            ? child.children.map((child, i) => {
-                                return (
-                                  <ul>
-                                    <li key={i}>
-                                      <Link
-                                        to={`/${child.relativeDirectory}/${child.name}`}
-                                        key={"sub-" + i}
-                                      >
-                                        {child.relativePath}
-                                      </Link>
-                                    </li>
-                                  </ul>
-                                )
-                              })
-                            : null}
-                        </li>
-                      </ul>
-                    )
-                  })
-                : null}
-          </li>
-        </ul>
-      ))}
+      <MobileNavigationItems menuItems={menuItemsTree}/>
     </nav>
   )
 }
