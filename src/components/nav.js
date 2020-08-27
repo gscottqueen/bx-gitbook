@@ -29,7 +29,6 @@ export default function Nav() {
   `)
 
   const pagesData = data.allFile.edges
-  console.log("data", pagesData)
 
   // Add an item node in the tree, at the right position
   function addToTree(node, treeNodes) {
@@ -83,7 +82,6 @@ export default function Nav() {
             >
               {item.titles.map(({ headings }) => {
                 return headings.map(({ value }) => {
-                  console.log(value)
                   return <span>{value}</span>
                 })
               })}
