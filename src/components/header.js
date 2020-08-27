@@ -7,7 +7,7 @@ const Header = ({ siteTitle }) => (
   <header>
     <div>
       <h1>
-        <Nav />
+        <Nav/>
       </h1>
     </div>
   </header>

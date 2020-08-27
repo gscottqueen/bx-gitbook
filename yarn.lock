@@ -1538,6 +1538,11 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
+"@pauliescanlon/gatsby-mdx-routes@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@pauliescanlon/gatsby-mdx-routes/-/gatsby-mdx-routes-0.0.11.tgz#8b8d5693130786cac5a728acef8b8a7d4af0c798"
+  integrity sha512-wnfrqyEs2INI7XdNozlMSLNWEy3AIBJqdMGCSMPp0Ut5ExwdUT4TE+G8IZHXkrv2e7mpzWNGfI8o+71LFsPbqA==
+
 "@pieh/friendly-errors-webpack-plugin@1.7.0-chalk-2":
   version "1.7.0-chalk-2"
   resolved "https://registry.yarnpkg.com/@pieh/friendly-errors-webpack-plugin/-/friendly-errors-webpack-plugin-1.7.0-chalk-2.tgz#2e9da9d3ade9d18d013333eb408c457d04eabac0"

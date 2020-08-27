@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "author": "Bixal <info@bixal.com>",
   "dependencies": {
+    "@pauliescanlon/gatsby-mdx-routes": "^0.0.11",
     "gatsby": "^2.24.50",
     "gatsby-image": "^2.4.16",
     "gatsby-plugin-manifest": "^2.4.24",
