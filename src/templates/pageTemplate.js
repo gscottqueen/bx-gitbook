@@ -5,7 +5,7 @@ import GitEditButton from "../components/gitedit"
 
 export default function PageTemplate({ data }) {
   const { markdownRemark } = data
-  const { headings, html, fileAbsolutePath} = markdownRemark
+  const { headings, html, fileAbsolutePath, timeToRead } = markdownRemark
 
   // build our github rel directory
   const regexDir = /.*(\/bx-techbook)+/
@@ -18,6 +18,7 @@ export default function PageTemplate({ data }) {
         <div className="page-markdown">
           <h1>{headings.value}</h1>
           <GitEditButton gitFile={gitFile}/>
+          <span>Time to read: {timeToRead} min</span>
           <div
             className="page-markdown-content"
             dangerouslySetInnerHTML={{ __html: html }}
@@ -35,6 +36,7 @@ export const pageQuery = graphql`
       }
       html
       fileAbsolutePath
+      timeToRead
     }
   }
 `
