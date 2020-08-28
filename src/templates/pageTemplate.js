@@ -2,27 +2,31 @@ import React from "react"
 import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import GitEditButton from "../components/gitedit"
+import PrevNext from "../components/prevnext"
 
-export default function PageTemplate({ data }) {
+export default function PageTemplate({ data, pageContext }) {
   const { markdownRemark } = data
   const { headings, html, fileAbsolutePath, timeToRead } = markdownRemark
+  const { previous, next } = pageContext
 
   // build our github rel directory
   const regexDir = /.*(\/bx-techbook)+/
   const filePath = `${fileAbsolutePath}`
-  const gitFile = filePath.replace(regexDir, '')
+  const gitFile = filePath.replace(regexDir, "")
 
   return (
     <Layout>
       <div className="page-container">
         <div className="page-markdown">
-          <GitEditButton gitFile={gitFile}/>
+          <GitEditButton gitFile={gitFile} />
           <span>Time to read: {timeToRead} min</span>
-          <ul>On this page:
-            {headings.map(( heading, i) => {
+          <PrevNext previous={previous} next={next} />
+          <ul>
+            On this page:
+            {headings.map((heading, i) => {
               return (
-                <li key={i}>{heading.value}</li>
-              )
+                  i > 0 ? <li key={i}>{heading.value}</li> : null
+                )
             })}
           </ul>
           <div
@@ -35,8 +39,8 @@ export default function PageTemplate({ data }) {
   )
 }
 export const pageQuery = graphql`
-  query($id: String!) {
-    markdownRemark(fileAbsolutePath: { regex: $id }) {
+  query($regex: String!) {
+    markdownRemark(fileAbsolutePath: { regex: $regex }) {
       headings {
         value
       }

@@ -12,23 +12,34 @@ async function createTechPages({ graphql, actions }) {
       allFile(
         filter: { sourceInstanceName: { eq: "pages" }, extension: { eq: "md" } }
       ) {
-        nodes {
-          id
-          relativePath
-          relativeDirectory
-          name
+        edges {
+          next {
+            relativeDirectory
+            name
+          }
+          previous {
+            relativeDirectory
+            name
+          }
+          node {
+            relativeDirectory
+            name
+          }
         }
       }
     }
   `)
 
-  data.allFile.nodes.forEach(file => {
-    let regex = `/(\/${file.relativeDirectory})+(\/${file.name})+/`
+  data.allFile.edges.forEach(file => {
 
     actions.createPage({
-      path: `/${file.relativeDirectory}/${file.name}/`,
+      path: `/${file.node.relativeDirectory}/${file.node.name}/`,
       component: require.resolve(`./src/templates/pageTemplate.js`),
-      context: { id: regex },
+      context: {
+        regex: `/(\/${file.node.relativeDirectory})+(\/${file.node.name})+/`,
+        previous: file.previous ? file.previous : null,
+        next: file.next ? file.next : null,
+      },
     })
   })
 }
