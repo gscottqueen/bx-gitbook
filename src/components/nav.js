@@ -73,20 +73,20 @@ export default function Nav() {
   function MobileNavigationItems(props) {
     return props.menuItems.map((item, i) => {
       return (
-        <ul key={item.name + i}>
+        <ul key={ `${item.name + i}` }>
           <li>
             <Link
               to={`/${item.relativeDirectory}/${item.name}`}
-              key={item.name}
+              key={`${item.name + i}` }
             >
               {item.titles.map(({ headings }) => {
                 return headings.map(({ value }) => {
-                  return <span>{value}</span>
+                  return <span key={`${value + i}`}>{value}</span>
                 })
               })}
             </Link>
             {item.children ? (
-              <MobileNavigationItems menuItems={item.children} />
+              <MobileNavigationItems menuItems={item.children}/>
             ) : null}
           </li>
         </ul>
