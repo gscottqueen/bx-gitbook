@@ -3,13 +3,18 @@ module.exports = {
     title: `Bixal Techbook`,
     description: `A git based documentation app for Bixal Corp Tech Knowledge.`,
     author: `@bixal`,
-    gitrepo: `https://github.com/gscottqueen/bx-gitbook`
+    gitrepo: `https://github.com/gscottqueen/bx-gitbook`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
-    `gatsby-transformer-remark`,
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
+    {
+      resolve: `gatsby-transformer-remark`,
+      options: {
+        plugins: [`gatsby-remark-autolink-headers`],
+      },
+    },
     {
       resolve: `gatsby-source-filesystem`,
       options: {

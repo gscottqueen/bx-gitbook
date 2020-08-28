@@ -3,6 +3,7 @@ import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import GitEditButton from "../components/gitedit"
 import PrevNext from "../components/prevnext"
+import InPageNav from "../components/inpagenav"
 
 export default function PageTemplate({ data, pageContext }) {
   const { markdownRemark } = data
@@ -19,16 +20,12 @@ export default function PageTemplate({ data, pageContext }) {
       <div className="page-container">
         <div className="page-markdown">
           <GitEditButton gitFile={gitFile} />
+          <br />
           <span>Time to read: {timeToRead} min</span>
+          <br />
           <PrevNext previous={previous} next={next} />
-          <ul>
-            On this page:
-            {headings.map((heading, i) => {
-              return (
-                  i > 0 ? <li key={i}>{heading.value}</li> : null
-                )
-            })}
-          </ul>
+          <br />
+          <InPageNav headings={headings} />
           <div
             className="page-markdown-content"
             dangerouslySetInnerHTML={{ __html: html }}
