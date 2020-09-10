@@ -1,9 +1,11 @@
-import React from "react"
+import React, { Fragment } from "react"
 import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import GitEditButton from "../components/gitedit"
 import PrevNext from "../components/prevnext"
 import InPageNav from "../components/inpagenav"
+import parse from "html-react-parser"
+import Image from "../components/image"
 
 export default function PageTemplate({ data, pageContext }) {
   const { markdownRemark } = data
@@ -14,6 +16,20 @@ export default function PageTemplate({ data, pageContext }) {
   const regexDir = /.*(\/bx-techbook)+/
   const filePath = `${fileAbsolutePath}`
   const gitFile = filePath.replace(regexDir, "")
+
+  const options = {
+    replace: domNode => {
+      if (!domNode.attribs) return
+
+      if (domNode.name === "img") {
+        return (
+          <Fragment>
+            <Image src={domNode.attribs.src} alt={domNode.attribs.alt} />
+          </Fragment>
+        )
+      }
+    },
+  }
 
   return (
     <Layout>
@@ -26,10 +42,7 @@ export default function PageTemplate({ data, pageContext }) {
           <PrevNext previous={previous} next={next} />
           <br />
           <InPageNav headings={headings} />
-          <div
-            className="page-markdown-content"
-            dangerouslySetInnerHTML={{ __html: html }}
-          />
+          <div className="page-markdown-content">{parse(html, options)}</div>
         </div>
       </div>
     </Layout>
