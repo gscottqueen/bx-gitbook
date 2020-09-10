@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import * as JsSearch from "js-search"
-import { useStaticQuery, graphql } from "gatsby"
+import { useStaticQuery, graphql, Link } from "gatsby"
 
 
 export default function Search() {
@@ -12,45 +12,51 @@ export default function Search() {
           headings(depth: h1) {
             value
           }
-          excerpt
+          excerpt(pruneLength: 600, format: PLAIN)
+          html
+          fileAbsolutePath
         }
       }
     }
   `)
 
   const pagesIndex = searchData.allMarkdownRemark.nodes
-  const search = new JsSearch.Search("id") // needs a uid
+  const search = new JsSearch.Search("id") // passing a uid
 
   console.log(search)
-  search.addIndex('excerpt')
+  search.addIndex("html")
 
   pagesIndex.forEach((page, i) => {
     search.addDocuments([page])
   })
 
-  // console.log(search.search("Security"))
   const documents = [...search._documents]
-
   const [searchIndex, setSearchIndex] = useState(documents)
 
   return (
     <div>
       <input
-        onChange={
-          e =>  e.target.value !== ""
-          ? setSearchIndex(search.search(e.target.value))
-          : setSearchIndex(documents)
+        onChange={e =>
+          e.target.value !== ""
+            ? setSearchIndex(search.search(e.target.value))
+            : setSearchIndex(documents)
         }
       ></input>
       {searchIndex && searchIndex.length ? (
         <ul>
           {searchIndex.map((page, i) => {
+            console.log(page)
+
+            // clean-build our rel path
+            const regexDir = /.*(\/pages)+/
+            const filePath = `${page.fileAbsolutePath}`
+            const newPath = filePath.replace(regexDir, "")
+            const regexExt = /\.[^.]+$/
+            const relPath = newPath.replace(regexExt, "")
+
             return (
               <li key={i}>
-                {page.headings.map((heading, i) => {
-                  console.log(heading.value)
-                  return <li key={i++}>{heading.value}</li>
-                })}
+                <Link to={relPath}>{page.excerpt}</Link>
               </li>
             )
           })}
