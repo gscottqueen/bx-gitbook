@@ -36,14 +36,17 @@ export default function Search() {
 
   // mark.js
   const [keyword, setKeyword] = useState("")
-  const context = document.querySelectorAll("a")
+  const context =
+    typeof document !== "undefined" ? document.querySelectorAll("a") : ""
 
-  const instance = new Mark(context)
-  const markOptions = {
-    "accuracy": "exactly",
+  if (context !== "") {
+    const instance = new Mark(context)
+    const markOptions = {
+      accuracy: "exactly",
+    }
+
+    instance.mark(keyword, [markOptions])
   }
-
-  instance.mark(keyword, [markOptions])
 
   function handleChange(e) {
     console.log(e.target.value)
