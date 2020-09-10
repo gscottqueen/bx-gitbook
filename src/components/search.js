@@ -28,7 +28,7 @@ export default function Search() {
     search.addDocuments([page])
   })
 
-  console.log(search.search("Security"))
+  // console.log(search.search("Security"))
   const documents = [...search._documents]
 
   const [searchIndex, setSearchIndex] = useState(documents)
@@ -45,7 +45,14 @@ export default function Search() {
       {searchIndex && searchIndex.length ? (
         <ul>
           {searchIndex.map((page, i) => {
-            return <li key={i}>{page.excerpt}</li>
+            return (
+              <li key={i}>
+                {page.headings.map((heading, i) => {
+                  console.log(heading.value)
+                  return <li key={i++}>{heading.value}</li>
+                })}
+              </li>
+            )
           })}
         </ul>
       ) : (
