@@ -38,7 +38,13 @@ const Layout = ({ children }) => {
         >
           <Nav />
         </aside>
-        <main>{children}</main>
+        <main
+          style={{
+            maxWidth: "80%"
+          }}
+        >
+          {children}
+        </main>
         <footer>
           © {new Date().getFullYear()},{" "}
           <a href="https://www.bixal.com">Bixal</a> Documentation
