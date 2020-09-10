@@ -7,11 +7,11 @@
 
 import React from "react"
 import PropTypes from "prop-types"
-import { useStaticQuery, graphql, Link } from "gatsby"
+import { useStaticQuery, graphql } from "gatsby"
 import Nav from "./Nav"
 
 import Header from "./Header"
-import "normalize.css"
+import "../css/holy-grail-grid.css"
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
@@ -25,33 +25,16 @@ const Layout = ({ children }) => {
   `)
 
   return (
-    <>
-      <Header siteTitle={data.site.siteMetadata.title} />
-      <div>
-        <aside
-          style={{
-            display: "block",
-            float: "left",
-            width: "33%",
-            height: "100%",
-          }}
-        >
-          <Link to="/search">Search</Link>
-          <Nav />
-        </aside>
-        <main
-          style={{
-            maxWidth: "80%"
-          }}
-        >
-          {children}
-        </main>
+    <div class="container">
+        <Header siteTitle={data.site.siteMetadata.title} />
+        <Nav />
+        <main>{children}</main>
+        <aside/>
         <footer>
           © {new Date().getFullYear()},{" "}
           <a href="https://www.bixal.com">Bixal</a> Documentation
         </footer>
-      </div>
-    </>
+    </div>
   )
 }
 

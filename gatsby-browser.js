@@ -3,7 +3,6 @@
  *
  * See: https://www.gatsbyjs.org/docs/browser-apis/
  */
-
-// You can delete this file if you're not using it
+require("normalize.css")
 require("prismjs/themes/prism-tomorrow.css")
 require("mark.js/dist/mark.min.js")

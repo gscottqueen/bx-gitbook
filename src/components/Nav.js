@@ -96,6 +96,7 @@ export default function Nav() {
 
   return (
     <nav>
+      <Link to="/search">Search</Link>
       <MobileNavigationItems menuItems={menuItemsTree} />
     </nav>
   )
