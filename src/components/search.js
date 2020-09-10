@@ -1,5 +1,6 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import * as JsSearch from "js-search"
+import * as Mark from "mark.js"
 import { useStaticQuery, graphql, Link } from "gatsby"
 
 
@@ -23,8 +24,8 @@ export default function Search() {
   const pagesIndex = searchData.allMarkdownRemark.nodes
   const search = new JsSearch.Search("id") // passing a uid
 
-  console.log(search)
-  search.addIndex("html")
+  // console.log(search)
+  search.addIndex("excerpt")
 
   pagesIndex.forEach((page, i) => {
     search.addDocuments([page])
@@ -33,19 +34,38 @@ export default function Search() {
   const documents = [...search._documents]
   const [searchIndex, setSearchIndex] = useState(documents)
 
+  // mark.js
+  const [keyword, setKeyword] = useState("")
+  const context = document.querySelectorAll("a")
+
+  const instance = new Mark(context)
+  const markOptions = {
+    "accuracy": "exactly",
+  }
+
+  instance.mark(keyword, [markOptions])
+
+  function handleChange(e) {
+    console.log(e.target.value)
+    if (e.target.value) {
+      setKeyword(e.target.value)
+      setSearchIndex(search.search(e.target.value))
+    } else {
+      setSearchIndex(documents)
+      setKeyword("")
+    }
+  }
+
+
   return (
     <div>
       <input
-        onChange={e =>
-          e.target.value !== ""
-            ? setSearchIndex(search.search(e.target.value))
-            : setSearchIndex(documents)
-        }
+        id="search"
+        onChange={ e => handleChange(e) }
       ></input>
       {searchIndex && searchIndex.length ? (
         <ul>
           {searchIndex.map((page, i) => {
-
             // clean-build our rel path
             const regexDir = /.*(\/pages)+/
             const filePath = `${page.fileAbsolutePath}`

@@ -18,6 +18,7 @@
     "gatsby-transformer-sharp": "^2.5.13",
     "html-react-parser": "^0.13.0",
     "js-search": "^2.0.0",
+    "mark.js": "^8.11.1",
     "normalize.css": "^8.0.1",
     "prismjs": "^1.21.0",
     "prop-types": "^15.7.2",
