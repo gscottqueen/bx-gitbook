@@ -7,7 +7,7 @@
 
 import React from "react"
 import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
+import { useStaticQuery, graphql, Link } from "gatsby"
 import Nav from "../components/nav"
 
 import Header from "./header"
@@ -36,6 +36,7 @@ const Layout = ({ children }) => {
             height: "100%",
           }}
         >
+          <Link to="/search">Search</Link>
           <Nav />
         </aside>
         <main
