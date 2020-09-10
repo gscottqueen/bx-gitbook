@@ -2,10 +2,10 @@ import React, { Fragment } from "react"
 import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import GitEditButton from "../components/GitEdit"
-import PrevNext from "../components/prevnext"
-import InPageNav from "../components/inpagenav"
+import PrevNext from "../components/PrevNext"
+import InPageNav from "../components/InPageNav"
 import parse from "html-react-parser"
-import Image from "../components/image"
+import Image from "../components/Image"
 
 export default function PageTemplate({ data, pageContext }) {
   const { markdownRemark } = data

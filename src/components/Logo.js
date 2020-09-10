@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import ImageSVG from '../components/imagesvg'
+import ImageSVG from './ImageSVG'
 
 function logo(props) {
   return (

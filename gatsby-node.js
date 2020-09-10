@@ -34,7 +34,7 @@ async function createTechPages({ graphql, actions }) {
 
     actions.createPage({
       path: `/${file.node.relativeDirectory}/${file.node.name}/`,
-      component: require.resolve(`./src/templates/pageTemplate.js`),
+      component: require.resolve(`./src/templates/PageTemplate.js`),
       context: {
         regex: `/(\/${file.node.relativeDirectory})+(\/${file.node.name})+/`,
         previous: file.previous ? file.previous : null,

@@ -1,7 +1,7 @@
 import React from 'react'
 import { animateScroll as scroll } from "react-scroll"
 
-function inpagenav(props) {
+function InPageNav(props) {
 
   const jumpTo = id => (e) => {
     e.preventDefault()
@@ -35,5 +35,5 @@ function inpagenav(props) {
   )
 }
 
-export default inpagenav
+export default InPageNav
 
