@@ -1,7 +1,7 @@
 import React, { Fragment } from "react"
 import { graphql } from "gatsby"
 import Layout from "../components/layout"
-import GitEditButton from "../components/gitedit"
+import GitEditButton from "../components/GitEdit"
 import PrevNext from "../components/prevnext"
 import InPageNav from "../components/inpagenav"
 import parse from "html-react-parser"
