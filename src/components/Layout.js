@@ -8,7 +8,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { useStaticQuery, graphql, Link } from "gatsby"
-import Nav from "../components/Nav"
+import Nav from "./Nav"
 
 import Header from "./Header"
 import "normalize.css"
