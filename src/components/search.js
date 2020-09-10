@@ -45,7 +45,6 @@ export default function Search() {
       {searchIndex && searchIndex.length ? (
         <ul>
           {searchIndex.map((page, i) => {
-            console.log(page)
 
             // clean-build our rel path
             const regexDir = /.*(\/pages)+/
