@@ -21,7 +21,7 @@ function inpagenav(props) {
 
   return (
     <ul>
-      On this page:
+      {props.headings.length > 1 && <div>On this page:</div>}
       {props.headings.map((heading, i) => {
         return i > 0 ? (
           <li key={i}>
