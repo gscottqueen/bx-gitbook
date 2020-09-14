@@ -24,7 +24,6 @@ export default function Search() {
   const pagesIndex = searchData.allMarkdownRemark.nodes
   const search = new JsSearch.Search("id") // passing a uid
 
-  // console.log(search)
   search.addIndex("excerpt")
 
   pagesIndex.forEach((page, i) => {
@@ -49,7 +48,6 @@ export default function Search() {
   }
 
   function handleChange(e) {
-    console.log(e.target.value)
     if (e.target.value) {
       setKeyword(e.target.value)
       setSearchIndex(search.search(e.target.value))
