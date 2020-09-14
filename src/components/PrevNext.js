@@ -6,8 +6,12 @@ function prevnext(props) {
       {props.previous ? (
         <span>
           previous:
-          <a href={`/${props.previous.relativeDirectory}/${props.previous.name}`}>
-            {props.previous.name}
+          <a
+            href={`/${props.previous.relativeDirectory}/${props.previous.name}`}
+          >
+            {props.previous.name === "README"
+              ? props.previous.relativeDirectory
+              : props.previous.name}
           </a>
         </span>
       ) : null}
@@ -16,7 +20,9 @@ function prevnext(props) {
         <span>
           next:
           <a href={`/${props.next.relativeDirectory}/${props.next.name}`}>
-            {props.next.name}
+            {props.next.name === "README"
+              ? props.next.relativeDirectory
+              : props.next.name}
           </a>
         </span>
       ) : null}
