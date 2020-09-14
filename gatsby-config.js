@@ -14,8 +14,16 @@ module.exports = {
       options: {
         plugins: [
           `gatsby-remark-autolink-headers`,
+          `gatsby-remark-numbered-footnotes`,
           {
             resolve: `gatsby-remark-prismjs`,
+          },
+          {
+            resolve: `gatsby-remark-external-links`,
+            options: {
+              target: `_blank`,
+              rel: `nofollow noopener noreferrer`,
+            },
           },
         ],
       },
