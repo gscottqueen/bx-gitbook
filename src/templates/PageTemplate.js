@@ -12,8 +12,10 @@ export default function PageTemplate({ data, pageContext }) {
   const { headings, html, fileAbsolutePath, timeToRead } = markdownRemark
   const { previous, next } = pageContext
 
+  console.log("rel", pageContext)
+
   // build our github rel directory
-  const regexDir = /.*(\/bx-techbook)+/
+  const regexDir = /^.*(?=(\/src))/
   const filePath = `${fileAbsolutePath}`
   const gitFile = filePath.replace(regexDir, "")
 
