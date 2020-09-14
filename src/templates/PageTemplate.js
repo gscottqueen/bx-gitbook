@@ -21,12 +21,30 @@ export default function PageTemplate({ data, pageContext }) {
     replace: domNode => {
       if (!domNode.attribs) return
 
+      // we replace images with the gatsby image
       if (domNode.name === "img") {
         return (
           <Fragment>
             <Image src={domNode.attribs.src} alt={domNode.attribs.alt} />
           </Fragment>
         )
+      }
+
+      // we remove any internal reference links extension so it works with our application without having to change the way content creators enter relative file names
+      if (domNode.name === "a") {
+        const regex = /(\.\/)/
+        const match = domNode.attribs.href.match(regex)
+
+        if (match) {
+          const ext = /(\.md)/
+          const removeExt = domNode.attribs.href.replace(ext, "")
+
+        return (
+          <Fragment>
+            <a href={removeExt}>{domNode.children[0].data}</a>
+          </Fragment>
+        )
+        }
       }
     },
   }
