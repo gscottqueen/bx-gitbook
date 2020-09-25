@@ -30,6 +30,7 @@ export default function Search() {
 
   const search = new JsSearch.Search("id") // passing a uid
 
+  // parse all our pages and construct our own index object
   pagesIndex.forEach((page, i) => {
 
     const newPage = {
@@ -54,7 +55,30 @@ export default function Search() {
           newPage.id = page.id
           newPage.title = domNode.children[1].data
           newPage.href = anchorPath
-          newPage.text = page.excerpt
+          newPage.text = page.excerpt == newPage.title ? null : page.excerpt
+
+          return (
+            newPage
+          )
+        }
+
+        if (domNode.name === "h2") {
+          const regexDir = /.*(\/pages)+/
+          const filePath = `${page.fileAbsolutePath}`
+          const newPath = filePath.replace(regexDir, "")
+          const regexExt = /\.[^.]+$/
+          const relPath = newPath.replace(regexExt, "")
+          const anchorPath = `${relPath + '/' + domNode.children[0].attribs.href}`
+          let childExcerpt = ""
+
+          if (domNode.next?.next?.children[0].type === "text") {
+            childExcerpt = domNode.next?.next?.children[0].data
+          }
+
+          newPage.id = page.id
+          newPage.title = domNode.children[1].data
+          newPage.href = anchorPath
+          newPage.text = childExcerpt
 
           return (
             newPage
@@ -69,8 +93,11 @@ export default function Search() {
     detailedIndex.then(
       search.addDocuments([newPage])
     )
-    search.addIndex(detailedIndex)
   })
+
+  search.addIndex = () => {
+
+  }
 
   const documents = [...search._documents]
   const [searchIndex, setSearchIndex] = useState(documents)
@@ -100,7 +127,7 @@ export default function Search() {
     }
   }
 
- console.log(search)
+//  console.log(search)
 
   return (
     <div>
@@ -111,14 +138,8 @@ export default function Search() {
       {searchIndex && searchIndex.length > -1 ? (
         <ul>
           {searchIndex.map((page, i) => {
-            // clean-build our rel path
-            // console.log(page)
-            // const regexDir = /.*(\/pages)+/
-            // const filePath = `${page.fileAbsolutePath}`
-            // const newPath = filePath.replace(regexDir, "")
-            // const regexExt = /\.[^.]+$/
-            // const relPath = newPath.replace(regexExt, "")
-            // console.log(page)
+
+            console.log(page)
             return (
               <li key={i}>
                 <Link to={page.href}>
