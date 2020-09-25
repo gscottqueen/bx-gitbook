@@ -1,7 +1,12 @@
 import React, { useState } from "react"
 import * as JsSearch from "js-search"
 import * as Mark from "mark.js"
-import { useStaticQuery, graphql, Link } from "gatsby"
+import {
+  useStaticQuery,
+  graphql,
+  Link
+} from "gatsby"
+import parse from "html-react-parser"
 
 
 export default function Search() {
@@ -13,7 +18,7 @@ export default function Search() {
           headings(depth: h1) {
             value
           }
-          excerpt(pruneLength: 600, format: PLAIN)
+          excerpt(pruneLength: 300, format: PLAIN)
           html
           fileAbsolutePath
         }
@@ -22,12 +27,49 @@ export default function Search() {
   `)
 
   const pagesIndex = searchData.allMarkdownRemark.nodes
+
   const search = new JsSearch.Search("id") // passing a uid
 
-  search.addIndex("excerpt")
-
   pagesIndex.forEach((page, i) => {
-    search.addDocuments([page])
+
+    const newPage = {
+      id: "",
+      title: "",
+      href: "",
+      text: ""
+    }
+
+    const options = {
+      replace: domNode => {
+        if (!domNode.attribs) return
+
+        if (domNode.name === "h1") {
+          const regexDir = /.*(\/pages)+/
+          const filePath = `${page.fileAbsolutePath}`
+          const newPath = filePath.replace(regexDir, "")
+          const regexExt = /\.[^.]+$/
+          const relPath = newPath.replace(regexExt, "")
+          const anchorPath = `${relPath + '/' + domNode.children[0].attribs.href}`
+
+          newPage.id = page.id
+          newPage.title = domNode.children[1].data
+          newPage.href = anchorPath
+          newPage.text = page.excerpt
+
+          return (
+            newPage
+          )
+        }
+      },
+    }
+    const detailedIndex = new Promise((resolve, reject) => {
+      resolve(parse(page.html, options));
+    });
+
+    detailedIndex.then(
+      search.addDocuments([newPage])
+    )
+    search.addIndex(detailedIndex)
   })
 
   const documents = [...search._documents]
@@ -38,12 +80,13 @@ export default function Search() {
   const context =
     typeof document !== "undefined" ? document.querySelectorAll("a") : ""
 
-  if (context !== "") {
+  if (context !== null) {
     const instance = new Mark(context)
     const markOptions = {
-      accuracy: "exactly",
+      "accuracy": "complementary",
+      "wildcards": "enabled",
+      "ignoreJoiners": true,
     }
-
     instance.mark(keyword, [markOptions])
   }
 
@@ -57,6 +100,7 @@ export default function Search() {
     }
   }
 
+ console.log(search)
 
   return (
     <div>
@@ -64,19 +108,23 @@ export default function Search() {
         id="search"
         onChange={ e => handleChange(e) }
       ></input>
-      {searchIndex && searchIndex.length ? (
+      {searchIndex && searchIndex.length > -1 ? (
         <ul>
           {searchIndex.map((page, i) => {
             // clean-build our rel path
-            const regexDir = /.*(\/pages)+/
-            const filePath = `${page.fileAbsolutePath}`
-            const newPath = filePath.replace(regexDir, "")
-            const regexExt = /\.[^.]+$/
-            const relPath = newPath.replace(regexExt, "")
-
+            // console.log(page)
+            // const regexDir = /.*(\/pages)+/
+            // const filePath = `${page.fileAbsolutePath}`
+            // const newPath = filePath.replace(regexDir, "")
+            // const regexExt = /\.[^.]+$/
+            // const relPath = newPath.replace(regexExt, "")
+            // console.log(page)
             return (
               <li key={i}>
-                <Link to={relPath}>{page.excerpt}</Link>
+                <Link to={page.href}>
+                  <h3>{page.title}</h3>
+                  <p>{page.text}</p>
+                </Link>
               </li>
             )
           })}
