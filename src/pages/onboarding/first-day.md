@@ -36,7 +36,7 @@ need a lot of technology experience!
   * Managers and mentors will send meeting invites to your account before your
   first day. You should check if anyone has sent you one and accept.
 * Set up your Bixal Signature at
-[Bixal Signature Generator](https://bixal-signature.herokuapp.com/)
+[Bixal Signature Generator](https://signature.bixal.com/)
   * There are additional links on that page with additional instructions!
 * Change your default meeting duration to allow for time between meetings
   * Review [A Better Meeting Culture](https://techbook.bixal.com)
