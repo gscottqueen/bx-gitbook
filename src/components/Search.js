@@ -55,7 +55,7 @@ export default function Search() {
           newPage.id = page.id
           newPage.title = domNode.children[1].data
           newPage.href = anchorPath
-          newPage.text = page.excerpt == newPage.title ? null : page.excerpt
+          newPage.text = page.excerpt === newPage.title ? null : page.excerpt
 
           return (
             newPage
@@ -70,6 +70,8 @@ export default function Search() {
           const relPath = newPath.replace(regexExt, "")
           const anchorPath = `${relPath + '/' + domNode.children[0].attribs.href}`
           let childExcerpt = ""
+
+          console.log(domNode)
 
           if (domNode.next?.next?.children[0].type === "text") {
             childExcerpt = domNode.next?.next?.children[0].data
@@ -87,7 +89,13 @@ export default function Search() {
       },
     }
     const detailedIndex = new Promise((resolve, reject) => {
-      resolve(parse(page.html, options));
+      if (page.title !== "" || page.title !== undefined) {
+        resolve(
+          parse(page.html, options)
+        );
+      } else {
+        reject(console.log("No title in document."))
+      }
     });
 
     detailedIndex.then(
@@ -139,13 +147,15 @@ export default function Search() {
         <ul>
           {searchIndex.map((page, i) => {
 
-            console.log(page)
+            // console.log(page)
             return (
               <li key={i}>
-                <Link to={page.href}>
-                  <h3>{page.title}</h3>
-                  <p>{page.text}</p>
-                </Link>
+                { page.href !== "" | page.href !== undefined ?
+                  <Link to={page.href}>
+                    <h3 style={{textTransform: "capitalize"}}>{page.title}</h3>
+                    <p>{page.text}</p>
+                  </Link> : null
+                }
               </li>
             )
           })}
