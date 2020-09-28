@@ -31,13 +31,46 @@ export default function Search() {
   const search = new JsSearch.Search("id") // passing a uid
 
   // parse all our pages and construct our own index object
-  pagesIndex.forEach((page, i) => {
+  pagesIndex.map((page, i) => {
 
-    const newPage = {
-      id: "",
-      title: "",
-      href: "",
-      text: ""
+    const newPageItem = []
+
+    function getAnchorPath(p,n) {
+      const regexDir = /.*(\/pages)+/
+      const filePath = `${p.fileAbsolutePath}`
+      const newPath = filePath.replace(regexDir, "")
+      const regexExt = /\.[^.]+$/
+      const relPath = newPath.replace(regexExt, "")
+      const anchorPath = `${relPath + '/' + n.children[0].attribs.href}`
+
+      return anchorPath
+    }
+
+    function buildChildExcerpt(n) {
+
+      // console.log(n)
+
+      let childExcerpt = ""
+      const childNodeDescriptions = n.next?.next?.children
+
+      // console.log(childNodeDescriptions)
+
+      childNodeDescriptions.map((e,i) => {
+        console.log('e', e)
+        // if (!e.data) {
+        //   return childExcerpt += e.children[0].data
+        // }
+        return childExcerpt += e.data
+      })
+
+      // for (const key in childNodeDescriptions) {
+      //   if (childNodeDescriptions.hasOwnProperty(key)) {
+
+      //     if (childNodeDescriptions[key].data) {
+      //       return childExcerpt += childNodeDescriptions[key].data
+      //     }
+      //   }
+      // }
     }
 
     const options = {
@@ -45,67 +78,49 @@ export default function Search() {
         if (!domNode.attribs) return
 
         if (domNode.name === "h1") {
-          const regexDir = /.*(\/pages)+/
-          const filePath = `${page.fileAbsolutePath}`
-          const newPath = filePath.replace(regexDir, "")
-          const regexExt = /\.[^.]+$/
-          const relPath = newPath.replace(regexExt, "")
-          const anchorPath = `${relPath + '/' + domNode.children[0].attribs.href}`
-
-          newPage.id = page.id
-          newPage.title = domNode.children[1].data
-          newPage.href = anchorPath
-          newPage.text = page.excerpt === newPage.title ? null : page.excerpt
+          newPageItem.id = page.id
+          newPageItem.title = domNode.children[1].data
+          newPageItem.href = getAnchorPath(page, domNode)
+          newPageItem.text = page.excerpt === newPageItem.title ? null : page.excerpt
+          newPageItem.type = "h1"
 
           return (
-            newPage
+            [...newPageItem]
           )
         }
 
         if (domNode.name === "h2") {
-          const regexDir = /.*(\/pages)+/
-          const filePath = `${page.fileAbsolutePath}`
-          const newPath = filePath.replace(regexDir, "")
-          const regexExt = /\.[^.]+$/
-          const relPath = newPath.replace(regexExt, "")
-          const anchorPath = `${relPath + '/' + domNode.children[0].attribs.href}`
-          let childExcerpt = ""
 
-          console.log(domNode)
-
-          if (domNode.next?.next?.children[0].type === "text") {
-            childExcerpt = domNode.next?.next?.children[0].data
-          }
-
-          newPage.id = page.id
-          newPage.title = domNode.children[1].data
-          newPage.href = anchorPath
-          newPage.text = childExcerpt
+          newPageItem.id = page.id
+          newPageItem.title = domNode.children[1].data
+          newPageItem.href = getAnchorPath(page, domNode)
+          newPageItem.text = buildChildExcerpt(domNode)
+          newPageItem.type = "h2"
 
           return (
-            newPage
+            [...newPageItem]
           )
         }
       },
     }
+
     const detailedIndex = new Promise((resolve, reject) => {
-      if (page.title !== "" || page.title !== undefined) {
         resolve(
           parse(page.html, options)
         );
-      } else {
-        reject(console.log("No title in document."))
-      }
     });
 
-    detailedIndex.then(
-      search.addDocuments([newPage])
+   return detailedIndex.then(
+      search.addDocuments([newPageItem])
     )
   })
 
-  search.addIndex = () => {
+  // console.log(search)
 
-  }
+  // search.addIndex = () => {
+
+  // }
+
 
   const documents = [...search._documents]
   const [searchIndex, setSearchIndex] = useState(documents)
@@ -135,8 +150,6 @@ export default function Search() {
     }
   }
 
-//  console.log(search)
-
   return (
     <div>
       <input
@@ -146,15 +159,17 @@ export default function Search() {
       {searchIndex && searchIndex.length > -1 ? (
         <ul>
           {searchIndex.map((page, i) => {
-
             // console.log(page)
             return (
               <li key={i}>
-                { page.href !== "" | page.href !== undefined ?
-                  <Link to={page.href}>
-                    <h3 style={{textTransform: "capitalize"}}>{page.title}</h3>
+                { page.href !== "" || page.href !== undefined ?
+                  <div>
+                    <Link to={page.href}>
+                      {page.type === "h1" ? <h3 style={{ textTransform: "capitalize" }}>{page.title}</h3> : <h4 style={{ textTransform: "capitalize" }}>{page.title}</h4>
+                      }
+                    </Link>
                     <p>{page.text}</p>
-                  </Link> : null
+                  </div> : null
                 }
               </li>
             )
