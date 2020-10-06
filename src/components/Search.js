@@ -48,29 +48,18 @@ export default function Search() {
 
     function buildChildExcerpt(n) {
 
-      // console.log(n)
-
-      let childExcerpt = ""
+      let childExcerpts = []
       const childNodeDescriptions = n.next?.next?.children
 
-      // console.log(childNodeDescriptions)
+      childNodeDescriptions.forEach(item => {
+        console.log(item)
 
-      childNodeDescriptions.map((e,i) => {
-        console.log('e', e)
-        // if (!e.data) {
-        //   return childExcerpt += e.children[0].data
-        // }
-        return childExcerpt += e.data
+        if (item.type === "text" && item.data.length >= 2) {
+          childExcerpts.push(item.data)
+        }
       })
 
-      // for (const key in childNodeDescriptions) {
-      //   if (childNodeDescriptions.hasOwnProperty(key)) {
-
-      //     if (childNodeDescriptions[key].data) {
-      //       return childExcerpt += childNodeDescriptions[key].data
-      //     }
-      //   }
-      // }
+      return childExcerpts.join()
     }
 
     const options = {
@@ -90,11 +79,11 @@ export default function Search() {
         }
 
         if (domNode.name === "h2") {
-
           newPageItem.id = page.id
           newPageItem.title = domNode.children[1].data
           newPageItem.href = getAnchorPath(page, domNode)
           newPageItem.text = buildChildExcerpt(domNode)
+          // newPageItem.text = "some excerpt"
           newPageItem.type = "h2"
 
           return (
@@ -106,8 +95,12 @@ export default function Search() {
 
     const detailedIndex = new Promise((resolve, reject) => {
         resolve(
+          // console.log(page),
           parse(page.html, options)
         );
+        reject(
+          // console.log("this page didn't resolve", page.excerpt)
+        )
     });
 
    return detailedIndex.then(
@@ -165,7 +158,7 @@ export default function Search() {
                 { page.href !== "" || page.href !== undefined ?
                   <div>
                     <Link to={page.href}>
-                      {page.type === "h1" ? <h3 style={{ textTransform: "capitalize" }}>{page.title}</h3> : <h4 style={{ textTransform: "capitalize" }}>{page.title}</h4>
+                      {page.type === "h1" ? <h3 style={{ textTransform: "capitalize" }}>{page.title}</h3> : <h4 style={{ textTransform: "capitalize", color: "gray" }}>{page.title}</h4>
                       }
                     </Link>
                     <p>{page.text}</p>
