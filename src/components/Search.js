@@ -8,6 +8,8 @@ import {
 } from "gatsby"
 import parse from "html-react-parser"
 
+const htmlparser2 = require("htmlparser2");
+
 
 export default function Search() {
   const searchData = useStaticQuery(graphql`
@@ -18,7 +20,7 @@ export default function Search() {
           headings(depth: h1) {
             value
           }
-          excerpt(pruneLength: 300, format: PLAIN)
+          excerpt(pruneLength: 600, format: PLAIN)
           html
           fileAbsolutePath
         }
@@ -46,20 +48,27 @@ export default function Search() {
       return anchorPath
     }
 
-    function buildChildExcerpt(n) {
+    function buildChildExcerpt(markup) {
 
       let childExcerpts = []
-      const childNodeDescriptions = n.next?.next?.children
 
-      childNodeDescriptions.forEach(item => {
-        console.log(item)
-
-        if (item.type === "text" && item.data.length >= 2) {
-          childExcerpts.push(item.data)
-        }
-      })
-
-      return childExcerpts.join()
+      function getText(markup) {
+        const parser = new htmlparser2.Parser({
+          ontext(text) {
+            // is our text really text?
+            const regexPattern = /(\b)/g
+            if (text.match(regexPattern)) {
+              childExcerpts.push(text)
+            }
+          },
+        });
+        parser.write(
+          markup
+        );
+        parser.end();
+      }
+      getText(markup) // get our excerpts
+      return childExcerpts.join().slice(0, 600).concat("...")
     }
 
     const options = {
@@ -82,8 +91,7 @@ export default function Search() {
           newPageItem.id = page.id
           newPageItem.title = domNode.children[1].data
           newPageItem.href = getAnchorPath(page, domNode)
-          newPageItem.text = buildChildExcerpt(domNode)
-          // newPageItem.text = "some excerpt"
+          newPageItem.text = buildChildExcerpt(page.html)
           newPageItem.type = "h2"
 
           return (
@@ -94,26 +102,14 @@ export default function Search() {
     }
 
     const detailedIndex = new Promise((resolve, reject) => {
-        resolve(
-          // console.log(page),
-          parse(page.html, options)
-        );
-        reject(
-          // console.log("this page didn't resolve", page.excerpt)
-        )
+        resolve(parse(page.html, options));
+        reject(new Error("DOH!"));
     });
 
    return detailedIndex.then(
       search.addDocuments([newPageItem])
     )
   })
-
-  // console.log(search)
-
-  // search.addIndex = () => {
-
-  // }
-
 
   const documents = [...search._documents]
   const [searchIndex, setSearchIndex] = useState(documents)
