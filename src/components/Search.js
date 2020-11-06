@@ -1,6 +1,5 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import * as JsSearch from "js-search"
-import * as Mark from "mark.js"
 import {
   useStaticQuery,
   graphql,
@@ -20,7 +19,7 @@ export default function Search() {
           headings(depth: h1) {
             value
           }
-          excerpt(pruneLength: 600, format: PLAIN)
+          excerpt(pruneLength: 300, format: PLAIN)
           html
           fileAbsolutePath
         }
@@ -31,9 +30,11 @@ export default function Search() {
   const pagesIndex = searchData.allMarkdownRemark.nodes
 
   const search = new JsSearch.Search("id") // passing a uid
+  search.addIndex("title")
+  search.addIndex("text")
 
   // parse all our pages and construct our own index object
-  pagesIndex.map((page, i) => {
+  pagesIndex.map((page) => {
 
     const newPageItem = []
 
@@ -68,7 +69,7 @@ export default function Search() {
         parser.end();
       }
       getText(markup) // get our excerpts
-      return childExcerpts.join().slice(0, 600).concat("...")
+      return childExcerpts.join()
     }
 
     const options = {
@@ -79,7 +80,7 @@ export default function Search() {
           newPageItem.id = page.id
           newPageItem.title = domNode.children[1].data
           newPageItem.href = getAnchorPath(page, domNode)
-          newPageItem.text = page.excerpt === newPageItem.title ? null : page.excerpt
+          newPageItem.text = buildChildExcerpt(page.html)
           newPageItem.type = "h1"
 
           return (
@@ -102,8 +103,8 @@ export default function Search() {
     }
 
     const detailedIndex = new Promise((resolve, reject) => {
-        resolve(parse(page.html, options));
-        reject(new Error("DOH!"));
+      resolve(parse(page.html, options));
+      reject(new Error("DOH!"));
     });
 
    return detailedIndex.then(
@@ -113,29 +114,13 @@ export default function Search() {
 
   const documents = [...search._documents]
   const [searchIndex, setSearchIndex] = useState(documents)
+  const searchInput = useRef(null)
 
-  // mark.js
-  const [keyword, setKeyword] = useState("")
-  const context =
-    typeof document !== "undefined" ? document.querySelectorAll("a") : ""
-
-  if (context !== null) {
-    const instance = new Mark(context)
-    const markOptions = {
-      "accuracy": "complementary",
-      "wildcards": "enabled",
-      "ignoreJoiners": true,
-    }
-    instance.mark(keyword, [markOptions])
-  }
-
-  function handleChange(e) {
-    if (e.target.value) {
-      setKeyword(e.target.value)
-      setSearchIndex(search.search(e.target.value))
+  function handleChange() {
+    if (searchInput.current.value) {
+      setSearchIndex(search.search(searchInput.current.value))
     } else {
       setSearchIndex(documents)
-      setKeyword("")
     }
   }
 
@@ -143,29 +128,24 @@ export default function Search() {
     <div>
       <input
         id="search"
-        onChange={ e => handleChange(e) }
+        ref={searchInput}
+        onChange={handleChange}
       ></input>
       {searchIndex && searchIndex.length > -1 ? (
         <ul>
-          {searchIndex.map((page, i) => {
-            // console.log(page)
+          {searchIndex.map((page) => {
             return (
-              <li key={i}>
-                { page.href !== "" || page.href !== undefined ?
-                  <div>
-                    <Link to={page.href}>
-                      {page.type === "h1" ? <h3 style={{ textTransform: "capitalize" }}>{page.title}</h3> : <h4 style={{ textTransform: "capitalize", color: "gray" }}>{page.title}</h4>
-                      }
-                    </Link>
-                    <p>{page.text}</p>
-                  </div> : null
-                }
-              </li>
+            <li key={page.id}>
+              <Link to={page.href}>
+                <h3>{page.title}</h3>
+              </Link>
+                <p>{ page.text.length < 600 ? page.text : page.text.slice(0, 600).concat("...")}</p>
+            </li>
             )
           })}
         </ul>
       ) : (
-        <div>reset search</div>
+        <div>no results found, reset search</div>
       )}
     </div>
   )
