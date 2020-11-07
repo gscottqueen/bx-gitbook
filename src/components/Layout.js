@@ -8,8 +8,9 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { useStaticQuery, graphql } from "gatsby"
-
 import Header from "./Header"
+import { SkipNavLink } from "@reach/skip-nav";
+import "@reach/skip-nav/styles.css";
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
@@ -23,6 +24,8 @@ const Layout = ({ children }) => {
   `)
 
   return (
+    <>
+    <SkipNavLink />
     <div id="page">
       <Header siteTitle={data.site.siteMetadata.title} />
       <section className="content">
@@ -34,6 +37,7 @@ const Layout = ({ children }) => {
         <a href="https://www.bixal.com">Bixal</a> Documentation
       </footer>
     </div>
+    </>
   )
 }
 
