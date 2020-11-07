@@ -99,22 +99,35 @@ export default function Nav() {
     <Navi
       id="menu"
       options={{
-        "slidingSubmenus": true,
-        "extensions": [
+      "slidingSubmenus": false,
+      "lazySubmenus": {
+        "load": true,
+      },
+      "setSelected": {
+        "current": "detect",
+        "hover": true,
+        "parent": true,
+      },
+      "keyboardNavigation" : {
+        "enable": true,
+        "enhance": true,
+      },
+      "classNames": {
+        "selected": "is-active",
+      },
+      "navbar": {
+        "add": false,
+      },
+      "extensions": {
+        "all": [
           "position-right",
-          "shadow-panels",
-          "theme-white",
-          "position-front"
+          "position-front",
+          "border-full",
         ],
-        "keyboardNavigation": {
-          "enable": true,
-          "enhance": true,
-        },
-        "setSlected": {
-          "hover": true,
-          "parent": true
-        }
-      }}
+        "(max-width: 720px)": ["fullscreen"],
+      },
+    }
+  }
     >
     <ul>
       <NavigationItems menuItems={menuItemsTree} />
