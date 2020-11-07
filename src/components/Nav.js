@@ -1,5 +1,6 @@
 import { graphql, useStaticQuery, Link } from "gatsby"
 import React from "react"
+import Navi from './Navi.js';
 
 export default function Nav() {
   const data = useStaticQuery(graphql`
@@ -70,34 +71,54 @@ export default function Nav() {
 
   const menuItemsTree = createTree(pagesData)
 
-  function MobileNavigationItems(props) {
+  function NavigationItems(props) {
     return props.menuItems.map((item, i) => {
       return (
-        <ul key={ `${item.name + i}` }>
-          <li>
-            <Link
+        <li>
+          <Link
               to={`/${item.relativeDirectory}/${item.name}`}
               key={`${item.name + i}` }
             >
               {item.titles.map(({ headings }) => {
                 return headings.map(({ value }) => {
-                  return <span key={`${value + i}`}>{value}</span>
+                  return value
                 })
               })}
             </Link>
-            {item.children ? (
-              <MobileNavigationItems menuItems={item.children}/>
-            ) : null}
+            {item.children.length > 0 && (
+              <ul>
+                <NavigationItems menuItems={item.children}/>
+              </ul>
+            ) }
           </li>
-        </ul>
       )
     })
   }
 
   return (
-    <nav>
-      <Link to="/search">Search</Link>
-      <MobileNavigationItems menuItems={menuItemsTree} />
-    </nav>
+    <Navi
+      id="menu"
+      options={{
+        "slidingSubmenus": true,
+        "extensions": [
+          "position-right",
+          "shadow-panels",
+          "theme-white",
+          "position-front"
+        ],
+        "keyboardNavigation": {
+          "enable": true,
+          "enhance": true,
+        },
+        "setSlected": {
+          "hover": true,
+          "parent": true
+        }
+      }}
+    >
+    <ul>
+      <NavigationItems menuItems={menuItemsTree} />
+    </ul>
+  </Navi>
   )
 }
