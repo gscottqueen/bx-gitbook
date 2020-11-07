@@ -58,11 +58,11 @@ export default function PageTemplate({ data, pageContext }) {
           <br />
           <span>Time to read: {timeToRead} min</span>
           <br />
-          <PrevNext previous={previous} next={next} />
-          <br />
           <InPageNav headings={headings} />
           <SkipNavContent />
           <div className="page-markdown-content">{parse(html, options)}</div>
+          <br />
+          <PrevNext previous={previous} next={next} />
         </div>
       </div>
     </Layout>
