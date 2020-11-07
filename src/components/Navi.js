@@ -66,8 +66,11 @@ function Navi(props) {
     };
 
     window.Mmenu = Mmenu;
-    new Mmenu( "#" + props.id, props.options );
+
+    if (typeof document === "undefined") return
+    document.addEventListener("DOMContentLoaded", new Mmenu( "#" + props.id, props.options ))
   });
+
 
   return(
     <nav id={props.id}>
