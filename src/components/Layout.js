@@ -8,7 +8,6 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { useStaticQuery, graphql } from "gatsby"
-import Nav from "./Nav"
 
 import Header from "./Header"
 import "../css/holy-grail-grid.css"
@@ -25,15 +24,16 @@ const Layout = ({ children }) => {
   `)
 
   return (
-    <div className="container">
-        <Header siteTitle={data.site.siteMetadata.title} />
-        <Nav />
+    <div id="page">
+      <Header siteTitle={data.site.siteMetadata.title} />
+      <section className="content">
         <main>{children}</main>
         <aside/>
-        <footer>
-          © {new Date().getFullYear()},{" "}
-          <a href="https://www.bixal.com">Bixal</a> Documentation
-        </footer>
+      </section>
+      <footer>
+        © {new Date().getFullYear()},{" "}
+        <a href="https://www.bixal.com">Bixal</a> Documentation
+      </footer>
     </div>
   )
 }
