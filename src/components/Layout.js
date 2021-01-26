@@ -11,6 +11,7 @@ import { useStaticQuery, graphql } from "gatsby"
 import Header from "./Header"
 import { SkipNavLink } from "@reach/skip-nav";
 import "@reach/skip-nav/styles.css";
+import Nav from '../components/Nav'
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
@@ -28,6 +29,7 @@ const Layout = ({ children }) => {
     <SkipNavLink />
     <div id="page">
       <Header siteTitle={data.site.siteMetadata.title} />
+      <Nav/>
       <section className="content">
         <main>{children}</main>
         <aside/>

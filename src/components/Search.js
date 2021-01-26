@@ -49,27 +49,31 @@ export default function Search() {
       return anchorPath
     }
 
-    function buildChildExcerpt(markup) {
+    function buildChildExcerpt(n) {
 
-      let childExcerpts = []
+      // console.log(n)
 
-      function getText(markup) {
-        const parser = new htmlparser2.Parser({
-          ontext(text) {
-            // is our text really text?
-            const regexPattern = /(\b)/g
-            if (text.match(regexPattern)) {
-              childExcerpts.push(text)
-            }
-          },
-        });
-        parser.write(
-          markup
-        );
-        parser.end();
-      }
-      getText(markup) // get our excerpts
-      return childExcerpts.join()
+      let childExcerpt = ""
+      const childNodeDescriptions = n.next?.next?.children
+
+      // console.log(childNodeDescriptions)
+
+      childNodeDescriptions.map((e,i) => {
+        // console.log('e', e)
+        // if (!e.data) {
+        //   return childExcerpt += e.children[0].data
+        // }
+        return childExcerpt += e.data
+      })
+
+      // for (const key in childNodeDescriptions) {
+      //   if (childNodeDescriptions.hasOwnProperty(key)) {
+
+      //     if (childNodeDescriptions[key].data) {
+      //       return childExcerpt += childNodeDescriptions[key].data
+      //     }
+      //   }
+      // }
     }
 
     const options = {
