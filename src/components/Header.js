@@ -1,12 +1,14 @@
 import React from "react"
 import Logo from './Logo'
 
-const Header = () => (
-  <header>
-    <div>
-      <h1><Logo/></h1>
-    </div>
-  </header>
-)
+export default function Header() {
 
-export default Header
+  return (
+    <header style={{"display": "flex"}} id="header">
+      <div>
+        <h1><Logo/></h1>
+      </div>
+      <a href="#menu">Menu</a>
+    </header>
+  )
+}

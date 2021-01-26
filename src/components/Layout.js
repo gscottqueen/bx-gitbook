@@ -8,10 +8,10 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { useStaticQuery, graphql } from "gatsby"
-import Nav from "./Nav"
-
 import Header from "./Header"
-import "../css/holy-grail-grid.css"
+import { SkipNavLink } from "@reach/skip-nav";
+import "@reach/skip-nav/styles.css";
+import Nav from '../components/Nav'
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
@@ -25,16 +25,21 @@ const Layout = ({ children }) => {
   `)
 
   return (
-    <div className="container">
-        <Header siteTitle={data.site.siteMetadata.title} />
-        <Nav />
+    <>
+    <SkipNavLink />
+    <div id="page">
+      <Header siteTitle={data.site.siteMetadata.title} />
+      <Nav/>
+      <section className="content">
         <main>{children}</main>
         <aside/>
-        <footer>
-          © {new Date().getFullYear()},{" "}
-          <a href="https://www.bixal.com">Bixal</a> Documentation
-        </footer>
+      </section>
+      <footer>
+        © {new Date().getFullYear()},{" "}
+        <a href="https://www.bixal.com">Bixal</a> Documentation
+      </footer>
     </div>
+    </>
   )
 }
 

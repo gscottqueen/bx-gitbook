@@ -6,6 +6,7 @@ import PrevNext from "../components/PrevNext"
 import InPageNav from "../components/InPageNav"
 import parse from "html-react-parser"
 import Image from "../components/Image"
+import { SkipNavContent } from "@reach/skip-nav";
 
 export default function PageTemplate({ data, pageContext }) {
   const { markdownRemark } = data
@@ -60,6 +61,7 @@ export default function PageTemplate({ data, pageContext }) {
           <PrevNext previous={previous} next={next} />
           <br />
           <InPageNav headings={headings} />
+          <SkipNavContent />
           <div className="page-markdown-content">{parse(html, options)}</div>
         </div>
       </div>
