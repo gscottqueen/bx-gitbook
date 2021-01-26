@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import * as JsSearch from "js-search"
-import * as Mark from "mark.js"
+typeof window !== 'undefined'
+  && import("mark.js")
 import {
   useStaticQuery,
   graphql,
@@ -56,7 +57,7 @@ export default function Search() {
       // console.log(childNodeDescriptions)
 
       childNodeDescriptions.map((e,i) => {
-        console.log('e', e)
+        // console.log('e', e)
         // if (!e.data) {
         //   return childExcerpt += e.children[0].data
         // }
@@ -125,20 +126,20 @@ export default function Search() {
   const documents = [...search._documents]
   const [searchIndex, setSearchIndex] = useState(documents)
 
-  // mark.js
-  const [keyword, setKeyword] = useState("")
-  const context =
-    typeof document !== "undefined" ? document.querySelectorAll("a") : ""
+  // // mark.js
+  // const [keyword, setKeyword] = useState("")
+  // const context =
+  //   typeof document !== "undefined" ? document.querySelectorAll("a") : ""
 
-  if (context !== null) {
-    const instance = new Mark(context)
-    const markOptions = {
-      "accuracy": "complementary",
-      "wildcards": "enabled",
-      "ignoreJoiners": true,
-    }
-    instance.mark(keyword, [markOptions])
-  }
+  // if (context !== null) {
+  //   const instance = new Mark(context)
+  //   const markOptions = {
+  //     "accuracy": "complementary",
+  //     "wildcards": "enabled",
+  //     "ignoreJoiners": true,
+  //   }
+  //   instance.mark(keyword, [markOptions])
+  // }
 
   function handleChange(e) {
     if (e.target.value) {

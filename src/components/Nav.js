@@ -75,8 +75,6 @@ export default function Nav() {
 
   }, [pagesData])
 
-  console.log(menuItemsTree)
-
   return (
     <MobileMenu
       id="menu"
