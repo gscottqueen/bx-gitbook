@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
+// import { navigate, Link } from "@reach/router"
 import PropTypes from 'prop-types';
 
 import 'mmenu-js/dist/mmenu'
 import 'mmenu-js/dist/mmenu.css';
+import 'mmenu-js/dist/mmenu.polyfills'
+import './mmenu-override.css'
 
 // Core
 import Mmenu from "mmenu-js/dist/core/oncanvas/mmenu.oncanvas";
@@ -33,52 +36,110 @@ import setselected from "mmenu-js/dist/addons/setselected/mmenu.setselected";
 import sidebar from "mmenu-js/dist/addons/sidebar/mmenu.sidebar";
 import toggles from "mmenu-js/dist/addons/toggles/mmenu.toggles";
 
+// Debugger
+// import 'mmenu-js/src/mmenu.debugger' // TODO: get this to work
+
 function Navi(props) {
+  const w = typeof window !== 'undefined' && window
 
-  useEffect(() => {
-      Mmenu.addons = {
+  Mmenu.addons = {
 
-      // Core
-      offcanvas,
-      screenReader,
-      scrollBugFix,
+    // Core
+    offcanvas,
+    screenReader,
+    scrollBugFix,
 
-      // Add-Ons
-      autoheight,
-      backbutton,
-      columns,
-      counters,
-      dividers,
-      drag,
-      dropdown,
-      fixedelements,
-      iconbar,
-      iconpanels,
-      keyboardnavigation,
-      lazysubmenus,
-      navbars,
-      pagescroll,
-      searchfield,
-      sectionindexer,
-      setselected,
-      sidebar,
-      toggles
-    };
+    // Add-Ons
+    autoheight,
+    backbutton,
+    columns,
+    counters,
+    dividers,
+    drag,
+    dropdown,
+    fixedelements,
+    iconbar,
+    iconpanels,
+    keyboardnavigation,
+    lazysubmenus,
+    navbars,
+    pagescroll,
+    searchfield,
+    sectionindexer,
+    setselected,
+    sidebar,
+    toggles,
+  };
 
-    window.Mmenu = Mmenu;
-    new Mmenu( "#" + props.id, props.options );
-  });
+  // console.log(menuRoot)
+  useLayoutEffect(() => {
+    w.Mmenu = Mmenu
+    w && props.ready && new Mmenu( "#" + props.id, props.options, props.configuration )
+  },[props, w])
+
+  console.log({props})
+
+  function NavigationItems(props) {
+
+  return props.menuItems && props.menuItems.map((item, i) => {
+
+    // const handleNavigation = (e) => {
+    //   return navigate(e.target.href)
+    // }
+
+    return (
+      <li key={i}>
+      {/* TODO: For a more flexible component allow
+      severall types of links to go through,
+      Not just gatsby */}
+        {/* <Link
+            to={`/${item.relativeDirectory}/${item.name}`}
+            key={`${item.name + i}` }
+            activeClassName="active"
+            partiallyActive={true}
+            onClick={e => handleNavigation(e)}
+            replace={true}
+          >
+            {item.titles.map(({ headings }) => {
+              return headings.map(({ value }) => {
+                return value
+              })
+            })}
+          </Link> */}
+          <a
+            href={`/${item.relativeDirectory}/${item.name}`}
+            key={`${item.name + i}` }
+          >
+            {item.titles.map(({ headings }) => {
+              return headings.map(({ value }) => {
+                return value
+              })
+            })}
+          </a>
+          {item.children.length > 0 && (
+            <ul>
+              <NavigationItems menuItems={item.children}/>
+            </ul>
+          ) }
+        </li>
+      )
+    })
+  }
 
   return(
     <nav id={props.id}>
-      {props.children}
+      <ul>
+        <NavigationItems menuItems={props.menuItems} />
+      </ul>
     </nav>
   );
 }
 
 Navi.propTypes = {
 	id: PropTypes.string.isRequired,
-	options: PropTypes.object.isRequired,
+  options: PropTypes.object.isRequired,
+  menuItems: PropTypes.array.isRequired,
+  ready: PropTypes.bool,
 	children: PropTypes.element
 }
 

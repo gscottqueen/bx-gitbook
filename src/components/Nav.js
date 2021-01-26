@@ -1,8 +1,9 @@
-import { graphql, useStaticQuery, Link } from "gatsby"
-import React from "react"
+import { graphql, useStaticQuery } from "gatsby"
+import React, { useEffect, useState } from "react"
 import Navi from './Navi.js';
 
 export default function Nav() {
+
   const data = useStaticQuery(graphql`
     query {
       allFile(
@@ -29,12 +30,14 @@ export default function Nav() {
   `)
 
   const pagesData = data.allFile.edges
+  const [menuItemsTree, setMenuItemsTree] = useState([])
 
+  useEffect(() => {
   // Add an item node in the tree, at the right position
   function addToTree(node, treeNodes) {
     // Check if the item node should inserted in a subnode
-    for (var i = 0; i < treeNodes.length; i++) {
-      var treeNode = treeNodes[i]
+    for (let i = 0; i < treeNodes.length; i++) {
+      const treeNode = treeNodes[i]
 
       // README files are needed but cause too much trouble because they are returned in the query as part of the reative path
       let path = node.node.relativePath.replace("/README.md", "")
@@ -59,41 +62,20 @@ export default function Nav() {
 
   //Create the item tree starting from menuItems
   function createTree(nodes) {
-    var tree = []
+      const tree = []
 
-    for (var i = 0; i < nodes.length; i++) {
-      var node = nodes[i]
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i]
       addToTree(node, tree)
     }
-
     return tree
   }
 
-  const menuItemsTree = createTree(pagesData)
+  setMenuItemsTree(createTree(pagesData))
 
-  function NavigationItems(props) {
-    return props.menuItems.map((item, i) => {
-      return (
-        <li>
-          <Link
-              to={`/${item.relativeDirectory}/${item.name}`}
-              key={`${item.name + i}` }
-            >
-              {item.titles.map(({ headings }) => {
-                return headings.map(({ value }) => {
-                  return value
-                })
-              })}
-            </Link>
-            {item.children.length > 0 && (
-              <ul>
-                <NavigationItems menuItems={item.children}/>
-              </ul>
-            ) }
-          </li>
-      )
-    })
-  }
+  }, [pagesData])
+
+  console.log(menuItemsTree)
 
   return (
     <Navi
@@ -110,15 +92,21 @@ export default function Nav() {
           "enable": true,
           "enhance": true,
         },
+        "onClick": {
+          "close": false,
+        },
         "setSlected": {
           "hover": true,
           "parent": true
         }
       }}
-    >
-    <ul>
-      <NavigationItems menuItems={menuItemsTree} />
-    </ul>
-  </Navi>
+      configuration={{
+        "classNames": {
+          "selected": 'active'
+        }
+      }}
+      ready={Boolean(menuItemsTree.length > 0)}
+      menuItems={menuItemsTree}
+    />
   )
 }
