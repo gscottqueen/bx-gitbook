@@ -1,6 +1,6 @@
 import { graphql, useStaticQuery } from "gatsby"
 import React, { useEffect, useState } from "react"
-import Navi from './Navi.js';
+import MobileMenu from './MobileMenu.js';
 
 export default function Nav() {
 
@@ -78,7 +78,7 @@ export default function Nav() {
   console.log(menuItemsTree)
 
   return (
-    <Navi
+    <MobileMenu
       id="menu"
       options={{
         "slidingSubmenus": true,

@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import 'mmenu-js/dist/mmenu'
 import 'mmenu-js/dist/mmenu.css';
 import 'mmenu-js/dist/mmenu.polyfills'
-import './mmenu-override.css'
 
 // Core
 import Mmenu from "mmenu-js/dist/core/oncanvas/mmenu.oncanvas";
@@ -39,7 +38,7 @@ import toggles from "mmenu-js/dist/addons/toggles/mmenu.toggles";
 // Debugger
 // import 'mmenu-js/src/mmenu.debugger' // TODO: get this to work
 
-function Navi(props) {
+function MobileMenu(props) {
   const w = typeof window !== 'undefined' && window
 
   Mmenu.addons = {
@@ -135,7 +134,7 @@ function Navi(props) {
   );
 }
 
-Navi.propTypes = {
+MobileMenu.propTypes = {
 	id: PropTypes.string.isRequired,
   options: PropTypes.object.isRequired,
   menuItems: PropTypes.array.isRequired,
@@ -143,5 +142,5 @@ Navi.propTypes = {
 	children: PropTypes.element
 }
 
-export default Navi
+export default MobileMenu
 
