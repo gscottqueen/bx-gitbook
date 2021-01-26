@@ -39,7 +39,7 @@ import toggles from "mmenu-js/dist/addons/toggles/mmenu.toggles";
 // import 'mmenu-js/src/mmenu.debugger' // TODO: get this to work
 
 function MobileMenu(props) {
-  const w = typeof window !== 'undefined' && window
+  const w = typeof window !== 'undefined' ? window : null
 
   Mmenu.addons = {
 
