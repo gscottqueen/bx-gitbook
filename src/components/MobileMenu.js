@@ -1,22 +1,35 @@
-import React from 'react';
+import React , {useRef, useEffect, useState} from 'react';
 import { Link, useLocation } from "@reach/router"
 import PropTypes from 'prop-types';
 import styled from 'styled-components'
 // our styles
 
+const Sidebar = styled.div`
+
+`
+
 const SidebarMenu = styled.nav`
-  /* background-color: lightgrey; */
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 20px;
+  min-height: 100%;
+  z-index: 9999;
+  width: 400px;
+  background-color: white;
+  box-shadow: -1px 0px 5px 1px #aaaaaa;
+  display: ${props => props.openMenu === true ? 'block' : 'none'};
 `
 
 const MenuList = styled.ul`
-  /* margin:0;
+  margin:0;
   padding: 0;
   text-indent: 0;
-  list-style-type: 0; */
+  list-style-type: 0;
 `
 
 const MenuItem = styled.li`
-  content: ${props => console.log(props.children[0].props)};
+  margin: ${props => props.sub ? '10px' : 0 };
   text-indent: 0;
   list-style-type: 0;
   border-left: ${props =>
@@ -41,7 +54,22 @@ const MenuLink = styled(Link)`
 
 const MenuLinkSub = styled(MenuLink)``
 
+// end styles
+
+
 function MobileMenu(props) {
+
+  // hooks
+  // const menuButton = useRef(null);
+  const [menuState, setMenuState] = useState(true)
+  // useEffect(() => {
+  //   console.log(menuRef.current);
+  //   menuRef.current.focus();
+  // }, []);
+
+  const handleToggleMenu = () => {
+    setMenuState(!menuState)
+  };
 
   function MenuItems(props) {
     const location = useLocation()
@@ -49,7 +77,7 @@ function MobileMenu(props) {
     return props.menuItems && props.menuItems.map((item, i) => {
 
     return (
-      <MenuItem key={i}>
+      <MenuItem key={i} sub={props.sub}>
         {
           !item.children.length && props.child ?
           <MenuLinkSub
@@ -80,7 +108,6 @@ function MobileMenu(props) {
             inPath={
               location.pathname.includes(`${item.relativeDirectory}`)
               }
-            hasChildren={item.children.length > 0}
             >
             {item.titles.map(({ headings }) => {
               return headings.map(({ value }) => {
@@ -91,7 +118,7 @@ function MobileMenu(props) {
         }
           {item.children.length > 0 && (
               <MenuList>
-                <MenuItems menuItems={item.children} child/>
+                <MenuItems menuItems={item.children} child sub/>
               </MenuList>
           )}
         </MenuItem>
@@ -100,11 +127,14 @@ function MobileMenu(props) {
   }
 
   return(
-    <SidebarMenu id={props.id}>
-      <MenuList>
-        <MenuItems menuItems={props.menuItems}/>
-      </MenuList>
-    </SidebarMenu>
+    <>
+      <button onClick={handleToggleMenu} style={{ position: 'relative', left: 0}}>Menu</button>
+      <SidebarMenu id={props.id} openMenu={menuState}>
+        <MenuList >
+          <MenuItems menuItems={props.menuItems}/>
+        </MenuList>
+      </SidebarMenu>
+    </>
   );
 }
 
