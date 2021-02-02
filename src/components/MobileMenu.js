@@ -17,9 +17,8 @@ const MenuList = styled.ul`
 
 const MenuItem = styled.li`
   content: ${props => console.log(props.children[0].props)};
-  /* padding: 10px 0;
   text-indent: 0;
-  list-style-type: 0; */
+  list-style-type: 0;
   border-left: ${props =>
     props.children[0].props.current === true ? '2px solid purple'
     : props.children[0].props.inPath === true ? '2px solid lightgrey'
@@ -28,13 +27,7 @@ const MenuItem = styled.li`
 
   display: ${props =>
     props.children[0].props.parent === true ? 'block'
-    : 'none'
-  };
-`
-
-const MenuItemSub = styled(MenuItem)`
-  display: ${props =>
-    props.children[0].props.inPath === true ? 'block'
+    : props.children[0].props.inPath === true ? 'block'
     : 'none'
   };
 `
@@ -46,12 +39,7 @@ const MenuLink = styled(Link)`
   }
 `
 
-const MenuLinkSub = styled(MenuLink)`
-  display: ${props =>
-    props.inPath === true ? 'block'
-    : 'none'
-  };
-`
+const MenuLinkSub = styled(MenuLink)``
 
 function MobileMenu(props) {
 
