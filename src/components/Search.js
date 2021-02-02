@@ -1,7 +1,5 @@
 import React, { useState } from "react"
 import * as JsSearch from "js-search"
-typeof window !== 'undefined'
-  && import("mark.js")
 import {
   useStaticQuery,
   graphql,
@@ -49,29 +47,12 @@ export default function Search() {
 
     function buildChildExcerpt(n) {
 
-      // console.log(n)
-
       let childExcerpt = ""
       const childNodeDescriptions = n.next?.next?.children
 
-      // console.log(childNodeDescriptions)
-
       childNodeDescriptions.map((e,i) => {
-        // console.log('e', e)
-        // if (!e.data) {
-        //   return childExcerpt += e.children[0].data
-        // }
         return childExcerpt += e.data
       })
-
-      // for (const key in childNodeDescriptions) {
-      //   if (childNodeDescriptions.hasOwnProperty(key)) {
-
-      //     if (childNodeDescriptions[key].data) {
-      //       return childExcerpt += childNodeDescriptions[key].data
-      //     }
-      //   }
-      // }
     }
 
     const options = {
@@ -116,38 +97,14 @@ export default function Search() {
     )
   })
 
-  // console.log(search)
-
-  // search.addIndex = () => {
-
-  // }
-
-
   const documents = [...search._documents]
   const [searchIndex, setSearchIndex] = useState(documents)
 
-  // // mark.js
-  // const [keyword, setKeyword] = useState("")
-  // const context =
-  //   typeof document !== "undefined" ? document.querySelectorAll("a") : ""
-
-  // if (context !== null) {
-  //   const instance = new Mark(context)
-  //   const markOptions = {
-  //     "accuracy": "complementary",
-  //     "wildcards": "enabled",
-  //     "ignoreJoiners": true,
-  //   }
-  //   instance.mark(keyword, [markOptions])
-  // }
-
   function handleChange(e) {
     if (e.target.value) {
-      setKeyword(e.target.value)
       setSearchIndex(search.search(e.target.value))
     } else {
       setSearchIndex(documents)
-      setKeyword("")
     }
   }
 
