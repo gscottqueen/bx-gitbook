@@ -1,149 +1,128 @@
-import React, { useLayoutEffect } from 'react';
-// import { navigate, Link } from "@reach/router"
+import React from 'react';
+import { Link, useLocation } from "@reach/router"
 import PropTypes from 'prop-types';
+import styled from 'styled-components'
+// our styles
 
-typeof window !== 'undefined'
-  && import('mmenu-js/dist/mmenu')
-  && import('mmenu-js/dist/mmenu.css')
-  && import('mmenu-js/dist/mmenu.polyfills')
-  && import("mmenu-js/dist/core/scrollbugfix/mmenu.scrollbugfix")
-  && import("mmenu-js/dist/addons/drag/mmenu.drag")
-  && import("mmenu-js/dist/addons/keyboardnavigation/mmenu.keyboardnavigation")
-  && import("mmenu-js/dist/addons/sectionindexer/mmenu.sectionindexer")
+const SidebarMenu = styled.nav`
+  /* background-color: lightgrey; */
+`
 
+const MenuList = styled.ul`
+  /* margin:0;
+  padding: 0;
+  text-indent: 0;
+  list-style-type: 0; */
+`
 
-// Core
-import Mmenu from "mmenu-js/dist/core/oncanvas/mmenu.oncanvas";
-
-// Core Add-Ons
-import offcanvas from "mmenu-js/dist/core/offcanvas/mmenu.offcanvas";
-import screenReader from "mmenu-js/dist/core/screenreader/mmenu.screenreader";
-// import scrollBugFix from "mmenu-js/dist/core/scrollbugfix/mmenu.scrollbugfix";
-
-// Add-Ons
-import autoheight from "mmenu-js/dist/addons/autoheight/mmenu.autoheight";
-import backbutton from "mmenu-js/dist/addons/backbutton/mmenu.backbutton";
-import columns from "mmenu-js/dist/addons/columns/mmenu.columns";
-import counters from "mmenu-js/dist/addons/counters/mmenu.counters";
-import dividers from "mmenu-js/dist/addons/dividers/mmenu.dividers";
-// import drag from "mmenu-js/dist/addons/drag/mmenu.drag";
-import dropdown from "mmenu-js/dist/addons/dropdown/mmenu.dropdown";
-import fixedelements from "mmenu-js/dist/addons/fixedelements/mmenu.fixedelements";
-import iconbar from "mmenu-js/dist/addons/iconbar/mmenu.iconbar";
-import iconpanels from "mmenu-js/dist/addons/iconpanels/mmenu.iconpanels";
-// import keyboardnavigation from "mmenu-js/dist/addons/keyboardnavigation/mmenu.keyboardnavigation";
-import lazysubmenus from "mmenu-js/dist/addons/lazysubmenus/mmenu.lazysubmenus";
-import navbars from "mmenu-js/dist/addons/navbars/mmenu.navbars";
-import pagescroll from "mmenu-js/dist/addons/pagescroll/mmenu.pagescroll";
-import searchfield from "mmenu-js/dist/addons/searchfield/mmenu.searchfield";
-// import sectionindexer from "mmenu-js/dist/addons/sectionindexer/mmenu.sectionindexer";
-import setselected from "mmenu-js/dist/addons/setselected/mmenu.setselected";
-import sidebar from "mmenu-js/dist/addons/sidebar/mmenu.sidebar";
-import toggles from "mmenu-js/dist/addons/toggles/mmenu.toggles";
-
-// Debugger
-// import 'mmenu-js/src/mmenu.debugger' // TODO: get this to work
-
-function MobileMenu(props) {
-  const w = typeof window !== 'undefined' ? window : null
-
-  Mmenu.addons = {
-
-    // Core
-    offcanvas,
-    screenReader,
-    // scrollBugFix,
-
-    // Add-Ons
-    autoheight,
-    backbutton,
-    columns,
-    counters,
-    dividers,
-    // drag,
-    dropdown,
-    fixedelements,
-    iconbar,
-    iconpanels,
-    // keyboardnavigation,
-    lazysubmenus,
-    navbars,
-    pagescroll,
-    searchfield,
-    // sectionindexer,
-    setselected,
-    sidebar,
-    toggles,
+const MenuItem = styled.li`
+  content: ${props => console.log(props.children[0].props)};
+  /* padding: 10px 0;
+  text-indent: 0;
+  list-style-type: 0; */
+  border-left: ${props =>
+    props.children[0].props.current === true ? '2px solid purple'
+    : props.children[0].props.inPath === true ? '2px solid lightgrey'
+    : 'none'
   };
 
+  display: ${props =>
+    props.children[0].props.parent === true ? 'block'
+    : 'none'
+  };
+`
 
-  useLayoutEffect(() => {
-    w.Mmenu = Mmenu
-    w && props.ready && new Mmenu( "#" + props.id, props.options, props.configuration )
-  },[props, w])
+const MenuItemSub = styled(MenuItem)`
+  display: ${props =>
+    props.children[0].props.inPath === true ? 'block'
+    : 'none'
+  };
+`
 
-  function NavigationItems(props) {
+const MenuLink = styled(Link)`
+  &:hover {
+    background-color: purple;
+    color: white;
+  }
+`
 
-  return props.menuItems && props.menuItems.map((item, i) => {
+const MenuLinkSub = styled(MenuLink)`
+  display: ${props =>
+    props.inPath === true ? 'block'
+    : 'none'
+  };
+`
 
-    // const handleNavigation = (e) => {
-    //   return navigate(e.target.href)
-    // }
+function MobileMenu(props) {
+
+  function MenuItems(props) {
+    const location = useLocation()
+
+    return props.menuItems && props.menuItems.map((item, i) => {
 
     return (
-      <li key={i}>
-      {/* TODO: For a more flexible component allow
-      severall types of links to go through,
-      Not just gatsby */}
-        {/* <Link
+      <MenuItem key={i}>
+        {
+          !item.children.length && props.child ?
+          <MenuLinkSub
+            child
             to={`/${item.relativeDirectory}/${item.name}`}
-            key={`${item.name + i}` }
-            activeClassName="active"
-            partiallyActive={true}
-            onClick={e => handleNavigation(e)}
-            replace={true}
-          >
+            key={`${item.name + i}`}
+            current={
+              location?.pathname.toString() === `/${item.relativeDirectory}/${item.name}`
+              }
+            inPath={
+              location.pathname.includes(`${item.relativeDirectory}`)
+              }
+            >
             {item.titles.map(({ headings }) => {
               return headings.map(({ value }) => {
                 return value
               })
             })}
-          </Link> */}
-          <a
-            href={`/${item.relativeDirectory}/${item.name}`}
-            key={`${item.name + i}` }
-          >
+          </MenuLinkSub>
+          :
+        <MenuLink
+            parent
+            to={`/${item.relativeDirectory}/${item.name}`}
+            key={`${item.name + i}`}
+            current={
+              location?.pathname.toString() === `/${item.relativeDirectory}/${item.name}`
+              }
+            inPath={
+              location.pathname.includes(`${item.relativeDirectory}`)
+              }
+            hasChildren={item.children.length > 0}
+            >
             {item.titles.map(({ headings }) => {
               return headings.map(({ value }) => {
                 return value
               })
             })}
-          </a>
+          </MenuLink>
+        }
           {item.children.length > 0 && (
-            <ul>
-              <NavigationItems menuItems={item.children}/>
-            </ul>
-          ) }
-        </li>
+              <MenuList>
+                <MenuItems menuItems={item.children} child/>
+              </MenuList>
+          )}
+        </MenuItem>
       )
     })
   }
 
   return(
-    <nav id={props.id}>
-      <ul>
-        <NavigationItems menuItems={props.menuItems} />
-      </ul>
-    </nav>
+    <SidebarMenu id={props.id}>
+      <MenuList>
+        <MenuItems menuItems={props.menuItems}/>
+      </MenuList>
+    </SidebarMenu>
   );
 }
 
 MobileMenu.propTypes = {
 	id: PropTypes.string.isRequired,
-  options: PropTypes.object.isRequired,
   menuItems: PropTypes.array.isRequired,
-  ready: PropTypes.bool,
-	children: PropTypes.element
 }
 
 export default MobileMenu

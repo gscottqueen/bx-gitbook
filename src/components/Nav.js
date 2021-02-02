@@ -78,32 +78,6 @@ export default function Nav() {
   return (
     <MobileMenu
       id="menu"
-      options={{
-        "slidingSubmenus": true,
-        "extensions": [
-          "position-right",
-          "shadow-panels",
-          "theme-white",
-          "position-front"
-        ],
-        "keyboardNavigation": {
-          "enable": true,
-          "enhance": true,
-        },
-        "onClick": {
-          "close": false,
-        },
-        "setSlected": {
-          "hover": true,
-          "parent": true
-        }
-      }}
-      configuration={{
-        "classNames": {
-          "selected": 'active'
-        }
-      }}
-      ready={Boolean(menuItemsTree.length > 0)}
       menuItems={menuItemsTree}
     />
   )

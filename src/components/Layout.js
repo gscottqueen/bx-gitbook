@@ -27,12 +27,11 @@ const Layout = ({ children }) => {
   return (
     <>
     <SkipNavLink />
+    <Header siteTitle={data.site.siteMetadata.title} />
+    <Nav/>
     <div id="page">
-      <Header siteTitle={data.site.siteMetadata.title} />
-      <Nav/>
       <section className="content">
         <main>{children}</main>
-        <aside/>
       </section>
       <footer>
         © {new Date().getFullYear()},{" "}
