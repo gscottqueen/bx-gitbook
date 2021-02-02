@@ -8,7 +8,6 @@ export default function Header() {
       <div>
         <h1><Logo/></h1>
       </div>
-      <a href="#menu">Menu</a>
     </header>
   )
 }
