@@ -1,26 +1,9 @@
-import React , {useRef, useEffect, useState} from 'react';
+import React from 'react';
 import { Link, useLocation } from "@reach/router"
 import PropTypes from 'prop-types';
 import styled from 'styled-components'
+
 // our styles
-
-const Sidebar = styled.div`
-
-`
-
-const SidebarMenu = styled.nav`
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 20px;
-  min-height: 100%;
-  z-index: 9999;
-  width: 400px;
-  background-color: white;
-  box-shadow: -1px 0px 5px 1px #aaaaaa;
-  display: ${props => props.openMenu === true ? 'block' : 'none'};
-`
-
 const MenuList = styled.ul`
   margin:0;
   padding: 0;
@@ -53,23 +36,10 @@ const MenuLink = styled(Link)`
 `
 
 const MenuLinkSub = styled(MenuLink)``
-
 // end styles
 
 
-function MobileMenu(props) {
-
-  // hooks
-  // const menuButton = useRef(null);
-  const [menuState, setMenuState] = useState(true)
-  // useEffect(() => {
-  //   console.log(menuRef.current);
-  //   menuRef.current.focus();
-  // }, []);
-
-  const handleToggleMenu = () => {
-    setMenuState(!menuState)
-  };
+function NestedMenu(props) {
 
   function MenuItems(props) {
     const location = useLocation()
@@ -127,21 +97,16 @@ function MobileMenu(props) {
   }
 
   return(
-    <>
-      <button onClick={handleToggleMenu} style={{ position: 'relative', left: 0}}>Menu</button>
-      <SidebarMenu id={props.id} openMenu={menuState}>
-        <MenuList >
-          <MenuItems menuItems={props.menuItems}/>
-        </MenuList>
-      </SidebarMenu>
-    </>
+    <MenuList>
+      <MenuItems menuItems={props.menuItems}/>
+    </MenuList>
   );
 }
 
-MobileMenu.propTypes = {
+NestedMenu.propTypes = {
 	id: PropTypes.string.isRequired,
   menuItems: PropTypes.array.isRequired,
 }
 
-export default MobileMenu
+export default NestedMenu
 

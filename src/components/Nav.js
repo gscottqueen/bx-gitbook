@@ -1,6 +1,6 @@
 import { graphql, useStaticQuery } from "gatsby"
 import React, { useEffect, useState } from "react"
-import MobileMenu from './MobileMenu.js';
+import NestedMenu from './NestedMenu';
 
 export default function Nav() {
 
@@ -76,7 +76,7 @@ export default function Nav() {
   }, [pagesData])
 
   return (
-    <MobileMenu
+    <NestedMenu
       id="menu"
       menuItems={menuItemsTree}
     />
