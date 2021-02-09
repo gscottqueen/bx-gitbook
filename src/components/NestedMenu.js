@@ -58,7 +58,7 @@ function NestedMenu(props) {
               location?.pathname.toString() === `/${item.relativeDirectory}/${item.name}`
               }
             inPath={
-              location.pathname.includes(`${item.relativeDirectory}`)
+              location.pathname.includes(`/${item.relativeDirectory}/`)
               }
             >
             {item.titles.map(({ headings }) => {
