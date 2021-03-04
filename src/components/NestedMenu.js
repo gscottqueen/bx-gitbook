@@ -12,20 +12,21 @@ const MenuList = styled.ul`
 `
 
 const MenuItem = styled.li`
-  margin: ${props => props.sub ? '10px' : 0 };
+  margin: ${props => (props.sub ? "10px" : 0)};
   text-indent: 0;
   list-style-type: 0;
   border-left: ${props =>
-    props.children[0].props.current === true ? '2px solid purple'
-    : props.children[0].props.inPath === true ? '2px solid lightgrey'
-    : 'none'
-  };
+    props.children[0].props.current === true
+      ? "2px solid purple"
+      : props.children[0].props.inPath === true
+      ? "2px solid lightgrey"
+      : "none"};
 
   display: ${props =>
-    props.children[0].props.parent === true ? 'block'
-    : props.children[0].props.inPath === true ? 'block'
-    : 'none'
-  };
+    props.children[0].props.sub
+      ? "none"
+      : "block"
+    };
 `
 
 const MenuLink = styled(Link)`
@@ -35,7 +36,9 @@ const MenuLink = styled(Link)`
   }
 `
 
-const MenuLinkSub = styled(MenuLink)``
+const MenuLinkSub = styled(MenuLink)`
+  background-color: grey;
+`
 // end styles
 
 
@@ -47,52 +50,49 @@ function NestedMenu(props) {
     return props.menuItems && props.menuItems.map((item, i) => {
 
     return (
-      <MenuItem key={i} sub={props.sub}>
-        {
-          !item.children.length && props.child ?
+      <MenuItem key={i} sub>
+        {item.children.length && props.sub ? (
           <MenuLinkSub
-            child
+            sub
             to={`/${item.relativeDirectory}/${item.name}`}
             key={`${item.name + i}`}
             current={
-              location?.pathname.toString() === `/${item.relativeDirectory}/${item.name}`
-              }
-            inPath={
-              location.pathname.includes(`/${item.relativeDirectory}/`)
-              }
-            >
+              location?.pathname.toString() ===
+              `/${item.relativeDirectory}/${item.name}`
+            }
+            inPath={location.pathname.includes(`/${item.relativeDirectory}/`)}
+          >
             {item.titles.map(({ headings }) => {
               return headings.map(({ value }) => {
                 return value
               })
             })}
           </MenuLinkSub>
-          :
-        <MenuLink
+        ) : (
+          <MenuLink
             parent
             to={`/${item.relativeDirectory}/${item.name}`}
             key={`${item.name + i}`}
             current={
-              location?.pathname.toString() === `/${item.relativeDirectory}/${item.name}`
-              }
-            inPath={
-              location.pathname.includes(`${item.relativeDirectory}`)
-              }
-            >
+              location?.pathname.toString() ===
+              `/${item.relativeDirectory}/${item.name}`
+            }
+            inPath={location.pathname.includes(`${item.relativeDirectory}`)}
+          >
             {item.titles.map(({ headings }) => {
               return headings.map(({ value }) => {
                 return value
               })
             })}
           </MenuLink>
-        }
-          {item.children.length > 0 && (
-              <MenuList>
-                <MenuItems menuItems={item.children} child sub/>
-              </MenuList>
-          )}
-        </MenuItem>
-      )
+        )}
+        {item.children.length > 0 && (
+          <MenuList>
+            <MenuItems menuItems={item.children} sub />
+          </MenuList>
+        )}
+      </MenuItem>
+    )
     })
   }
 
